@@ -209,17 +209,23 @@
           </div>
         </div>
         <div class="event-create">
-          <span class="create-text"><span>일정 생성</span></span>
+          <button class="create-text">일정 생성</button>
         </div>
         <div class="group-create">
-          <span class="create-text"><span>모임 생성</span></span>
+          <button class="create-text"><span>모임 생성</span></button>
         </div>
       </div>
 </template>
 
 <script>
+
 export default {
-  data() {}
+    components: {
+      
+    },
+    data() {
+    
+    },
 }
 
 </script>
@@ -530,7 +536,7 @@ export default {
     flex-direction: column;
     position: relative;
     top: 18vh;
-    left: -13%; /* 왼쪽으로 5픽셀 이동 */
+    left: -13%; 
   }
 
   .home-text-time {

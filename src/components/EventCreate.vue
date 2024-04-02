@@ -5,7 +5,8 @@
           <img
             alt="IconFontAwesomeFreeSolidAclose1941"
             src="/external/iconfontawesomefreesolidaclose1941-1fn8.svg"
-            class="frame-icon-font-awesome-free-solid-aclose"
+            class="closeBtn"
+            @click="closeModal"
           />
         </div>
         <img
@@ -27,16 +28,16 @@
           <span class="frame-text"><span>2024년 3월 6일</span></span>
         </div>
         <div class="frame-frame89">
-          <span class="frame-text02"><span>오후 06:30</span></span>
+          <span class="frame-text"><span>오후 06:30</span></span>
         </div>
         <div class="frame-frame90">
-          <span class="frame-text04"><span>2024년 3월 6일</span></span>
+          <span class="frame-text"><span>2024년 3월 6일</span></span>
         </div>
         <div class="frame-frame91">
-          <span class="frame-text06"><span>오후 07:30</span></span>
+          <span class="frame-text"><span>오후 07:30</span></span>
         </div>
         <div class="frame-frame88">
-          <span class="frame-text08"><span>제목을 입력하세요.</span></span>
+          <span class="input-text"><input placeholder="제목을 입력하세요."></span>
         </div>
         <div class="frame-frame95">
           <span class="frame-text10"><span>아이젠하워 매트릭스 중요도</span></span>
@@ -45,16 +46,16 @@
           <span class="frame-text12"><span>저장</span></span>
         </div>
         <div class="frame-frame94">
-          <span class="frame-text14"><span>장소를 입력하세요.</span></span>
+          <span class="input-text"><input placeholder="장소를 입력하세요."></span>
         </div>
         <div class="frame-frame100">
-          <span class="frame-text16"><span>메모를 입력하세요.</span></span>
+          <span class="input-text"><input placeholder="메모를 입력하세요."></span>
         </div>
         <div class="frame-frame101">
-          <span class="frame-text18"><span>첨부파일 추가</span></span>
+          <button class="input-text">첨부파일 추가</button>
         </div>
         <div class="frame-frame102">
-          <span class="frame-text20"><span>To-Do 리스트 작성하기</span></span>
+          <span class="input-text"><span>To-Do 리스트 작성하기</span></span>
         </div>
         <div class="frame-frame96">
           <div class="frame-frame97">
@@ -64,7 +65,7 @@
               class="frame-rectangle9"
             />
           </div>
-          <span class="frame-text22"><span>중요 &amp; 긴급</span></span>
+          <span class="input-text"><span>중요 &amp; 긴급</span></span>
         </div>
         <div class="frame-frame971">
           <div class="frame-frame972">
@@ -74,7 +75,7 @@
               class="frame-rectangle91"
             />
           </div>
-          <span class="frame-text24"><span>중요 &amp; 긴급하지 않음</span></span>
+          <span class="input-text"><span>중요 &amp; 긴급하지 않음</span></span>
         </div>
         <div class="frame-frame98">
           <div class="frame-frame973">
@@ -84,7 +85,7 @@
               class="frame-rectangle92"
             />
           </div>
-          <span class="frame-text26"><span>중요하지 않음 &amp; 긴급</span></span>
+          <span class="input-text"><span>중요하지 않음 &amp; 긴급</span></span>
         </div>
         <div class="frame-frame99">
           <div class="frame-frame974">
@@ -94,7 +95,7 @@
               class="frame-rectangle93"
             />
           </div>
-          <span class="frame-text28">
+          <span class="input-text">
             <span>중요하지 않음 &amp; 긴급하지 않음</span>
           </span>
         </div>
@@ -164,21 +165,22 @@
   
   <script>
   export default {
-    name: 'EventCreate',
-    metaInfo: {
-      title: 'exported project',
-    },
+    data() {
+      
+    }
   }
   </script>
   
   <style scoped>
   .frame-container {
-    width: 100%;
+    width: 355px;
     display: flex;
     overflow: auto;
     min-height: 100vh;
     align-items: center;
     flex-direction: column;
+    margin: auto;
+    justify-content: center;
   }
   .frame-frame {
     width: 100%;
@@ -208,12 +210,18 @@
     border-radius: 5px 5px 0 0;
     background-color: rgba(242, 242, 242, 1);
   }
-  .frame-icon-font-awesome-free-solid-aclose {
+  .closeBtn {
     top: 6px;
     left: 337px;
     width: 9px;
     height: 9px;
     position: absolute;
+  }
+  .closeBtn:hover,
+  .closeBtn:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
   }
   .frame-line3 {
     top: 55px;
@@ -262,6 +270,7 @@
     line-height: normal;
     font-stretch: normal;
     text-decoration: none;
+    white-space: nowrap;
   }
   .frame-frame89 {
     gap: 10px;
@@ -278,18 +287,6 @@
     justify-content: center;
     background-color: rgba(242, 242, 242, 1);
   }
-  .frame-text02 {
-    color: rgba(104, 104, 103, 1);
-    height: auto;
-    font-size: 10px;
-    font-style: Regular;
-    text-align: left;
-    font-family: Poppins;
-    font-weight: 400;
-    line-height: normal;
-    font-stretch: normal;
-    text-decoration: none;
-  }
   .frame-frame90 {
     gap: 10px;
     top: 95px;
@@ -304,18 +301,6 @@
     border-radius: 3px;
     justify-content: center;
     background-color: rgba(242, 242, 242, 1);
-  }
-  .frame-text04 {
-    color: rgba(104, 104, 103, 1);
-    height: auto;
-    font-size: 10px;
-    font-style: Regular;
-    text-align: left;
-    font-family: Poppins;
-    font-weight: 400;
-    line-height: normal;
-    font-stretch: normal;
-    text-decoration: none;
   }
   .frame-frame91 {
     gap: 10px;
@@ -332,18 +317,6 @@
     justify-content: center;
     background-color: rgba(242, 242, 242, 1);
   }
-  .frame-text06 {
-    color: rgba(104, 104, 103, 1);
-    height: auto;
-    font-size: 10px;
-    font-style: Regular;
-    text-align: left;
-    font-family: Poppins;
-    font-weight: 400;
-    line-height: normal;
-    font-stretch: normal;
-    text-decoration: none;
-  }
   .frame-frame88 {
     gap: 10px;
     top: 32px;
@@ -357,9 +330,10 @@
     flex-shrink: 0;
     justify-content: center;
   }
-  .frame-text08 {
+  .input-text {
     color: rgba(104, 104, 103, 1);
     height: auto;
+    margin-left: 15px;
     font-size: 10px;
     font-style: Medium;
     text-align: left;
@@ -368,6 +342,7 @@
     line-height: normal;
     font-stretch: normal;
     text-decoration: none;
+    white-space: nowrap;
   }
   .frame-frame95 {
     gap: 10px;
@@ -393,6 +368,7 @@
     line-height: normal;
     font-stretch: normal;
     text-decoration: none;
+    white-space: nowrap;
   }
   .frame-frame103 {
     gap: 10px;
@@ -420,6 +396,7 @@
     line-height: normal;
     font-stretch: normal;
     text-decoration: none;
+    white-space: nowrap;
   }
   .frame-frame94 {
     gap: 10px;
@@ -434,18 +411,6 @@
     flex-shrink: 0;
     justify-content: center;
   }
-  .frame-text14 {
-    color: rgba(104, 104, 103, 1);
-    height: auto;
-    font-size: 10px;
-    font-style: Medium;
-    text-align: left;
-    font-family: Poppins;
-    font-weight: 500;
-    line-height: normal;
-    font-stretch: normal;
-    text-decoration: none;
-  }
   .frame-frame100 {
     gap: 10px;
     top: 285px;
@@ -458,18 +423,6 @@
     align-items: center;
     flex-shrink: 0;
     justify-content: center;
-  }
-  .frame-text16 {
-    color: rgba(104, 104, 103, 1);
-    height: auto;
-    font-size: 10px;
-    font-style: Medium;
-    text-align: left;
-    font-family: Poppins;
-    font-weight: 500;
-    line-height: normal;
-    font-stretch: normal;
-    text-decoration: none;
   }
   .frame-frame101 {
     gap: 10px;
@@ -484,18 +437,6 @@
     flex-shrink: 0;
     justify-content: center;
   }
-  .frame-text18 {
-    color: rgba(104, 104, 103, 1);
-    height: auto;
-    font-size: 10px;
-    font-style: Medium;
-    text-align: left;
-    font-family: Poppins;
-    font-weight: 500;
-    line-height: normal;
-    font-stretch: normal;
-    text-decoration: none;
-  }
   .frame-frame102 {
     gap: 10px;
     top: 348px;
@@ -508,18 +449,6 @@
     align-items: center;
     flex-shrink: 0;
     justify-content: center;
-  }
-  .frame-text20 {
-    color: rgba(104, 104, 103, 1);
-    height: auto;
-    font-size: 10px;
-    font-style: Medium;
-    text-align: left;
-    font-family: Poppins;
-    font-weight: 500;
-    line-height: normal;
-    font-stretch: normal;
-    text-decoration: none;
   }
   .frame-frame96 {
     gap: 10px;
@@ -552,18 +481,6 @@
     border-style: solid;
     border-width: 0.30000001192092896px;
   }
-  .frame-text22 {
-    color: rgba(104, 104, 103, 1);
-    height: auto;
-    font-size: 10px;
-    font-style: Medium;
-    text-align: left;
-    font-family: Poppins;
-    font-weight: 500;
-    line-height: normal;
-    font-stretch: normal;
-    text-decoration: none;
-  }
   .frame-frame971 {
     gap: 10px;
     top: 190px;
@@ -594,18 +511,6 @@
     border-color: rgba(104, 104, 103, 1);
     border-style: solid;
     border-width: 0.30000001192092896px;
-  }
-  .frame-text24 {
-    color: rgba(104, 104, 103, 1);
-    height: auto;
-    font-size: 10px;
-    font-style: Medium;
-    text-align: left;
-    font-family: Poppins;
-    font-weight: 500;
-    line-height: normal;
-    font-stretch: normal;
-    text-decoration: none;
   }
   .frame-frame98 {
     gap: 10px;
@@ -638,18 +543,6 @@
     border-style: solid;
     border-width: 0.30000001192092896px;
   }
-  .frame-text26 {
-    color: rgba(104, 104, 103, 1);
-    height: auto;
-    font-size: 10px;
-    font-style: Medium;
-    text-align: left;
-    font-family: Poppins;
-    font-weight: 500;
-    line-height: normal;
-    font-stretch: normal;
-    text-decoration: none;
-  }
   .frame-frame99 {
     gap: 10px;
     top: 222px;
@@ -680,18 +573,6 @@
     border-color: rgba(104, 104, 103, 1);
     border-style: solid;
     border-width: 0.30000001192092896px;
-  }
-  .frame-text28 {
-    color: rgba(104, 104, 103, 1);
-    height: auto;
-    font-size: 10px;
-    font-style: Medium;
-    text-align: left;
-    font-family: Poppins;
-    font-weight: 500;
-    line-height: normal;
-    font-stretch: normal;
-    text-decoration: none;
   }
   .frame-icon-font-awesome-free-solid-sstopwatch {
     top: 66px;
@@ -777,6 +658,7 @@
     line-height: normal;
     font-stretch: normal;
     text-decoration: none;
+    white-space: nowrap;
   }
   .frame-icon-font-awesome-free-solid-llocationarrow {
     top: 130px;
