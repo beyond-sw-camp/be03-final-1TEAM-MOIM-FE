@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
-import LoginComponent from "@/components/LoginComponent";
+import EventCreate from "@/components/EventCreate.vue";
+// import LoginComponent from "@/components/LoginComponent";
+
 
 const routes = [
     {
@@ -7,10 +9,17 @@ const routes = [
         redirect: '/main'
     },
     {
-        path: "/login",
-        name: "LoginComponent",
-        component: LoginComponent
+        path: "/event",
+        name: "EventCreate",
+        component: EventCreate
     },
+   
+    // {
+    //     path: "/login",
+    //     name: "LoginComponent",
+    //     component: LoginComponent
+    // },
+
 ];
 
 export default createRouter({
