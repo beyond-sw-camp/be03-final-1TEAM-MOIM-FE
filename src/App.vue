@@ -1,12 +1,9 @@
 <template>
-	<AppHeader />
-    <router-view class="min-h-[800px]"/>
-	<AppFooter/>
+  <MainPage></MainPage>
 </template>
 
 <script setup>
-import AppHeader  from "@/components/AppHeader.vue";
-// import AppFooter from "@/components/AppFooter.vue";
+import MainPage from "@/components/MainPage.vue";
 
 </script>
 

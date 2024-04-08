@@ -1,7 +1,6 @@
-import { createRouter, createWebHistory } from "vue-router";
+import {createRouter, createWebHistory} from "vue-router";
+import MainPage from "@/components/MainPage.vue";
 import EventCreate from "@/components/EventCreate.vue";
-// import LoginComponent from "@/components/LoginComponent";
-
 
 const routes = [
     {
@@ -9,16 +8,15 @@ const routes = [
         redirect: '/main'
     },
     {
+        path: "/main",
+        name: "MainPage",
+        component: MainPage
+    },
+    {
         path: "/event",
         name: "EventCreate",
         component: EventCreate
     },
-   
-    // {
-    //     path: "/login",
-    //     name: "LoginComponent",
-    //     component: LoginComponent
-    // },
 
 ];
 
