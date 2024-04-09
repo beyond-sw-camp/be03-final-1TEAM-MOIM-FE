@@ -1,8 +1,9 @@
 <template>
-    <router-view class="min-h-[800px]"/>
+	<MainPage></MainPage>
 </template>
 
 <script setup>
+import MainPage from "@/components/MainPage.vue";
 
 </script>
 
