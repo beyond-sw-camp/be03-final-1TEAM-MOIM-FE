@@ -8,6 +8,7 @@ const routes = [
     {path: "/register", name: "register", component: Register},
     {path: "/", name: "home", component: Login},
     {path: "/event", name: "EventCreate", component: EventCreate},
+]
 
 const router = createRouter({
     history: createWebHistory(),
