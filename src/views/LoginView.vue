@@ -80,6 +80,9 @@
 </template>
 
 <script>
+import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
+
 export default {
     data() {
         return {
@@ -103,9 +106,35 @@ export default {
                 return;
             }
             this.loading = true;
-
             setTimeout(() => (this.loading = false), 2000)
+            this.doLogin();
         },
+        async doLogin(){
+            const loginData = {
+                email: this.email,
+                password: this.password
+            }
+            console.log(loginData);
+            try {
+                const response = await axios.post(`${process.env.VUE_APP_API_BASE_URL}/login`, loginData);
+                console.log(response);
+                const accessToken = response.data.access_token;
+                const refreshToken = response.data.refresh_token;
+                if (accessToken && refreshToken){
+                    const decodedAccessToken = jwtDecode(accessToken);
+                    localStorage.setItem("accessToken", accessToken);
+                    localStorage.setItem("refreshToken", refreshToken);
+                    localStorage.setItem("expiredTime", decodedAccessToken.exp);
+                    this.$router.push({ name: 'MainPage'});
+                } else {
+                    console.log("200 OK But Not Token");
+                    alert("로그인 실패");
+                }
+            } catch(error){
+                console.error(error);
+                alert(error.response.data);
+            }
+        }
     }
 };
 </script>

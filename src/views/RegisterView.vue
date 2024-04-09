@@ -261,7 +261,7 @@ export default {
 
                 if (response.status === 200){
                     alert("회원가입이 완료되었습니다.");
-                    this.$router.push({ name: 'home'});
+                    this.$router.push({ name: 'login'});
                 }
             } catch(error){
                 console.error(error);
