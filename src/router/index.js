@@ -3,15 +3,41 @@ import MainPage from "@/components/MainPage.vue";
 import Register from "@/views/RegisterView.vue";
 import Login from "@/views/LoginView.vue";
 import EventCreate from "@/components/EventCreate.vue";
+import CalendarComponent from "@/components/CalendarComponent.vue";
+import TestView from "@/views/TestView.vue";
 
 const routes = [
-    { path: "/", redirect: '/main' },
-    { path: "/main", name: "MainPage", component: MainPage },
 
-    { path: "/event", name: "EventCreate", component: EventCreate },
-
-    { path: "/register", name: "register", component: Register},
-    { path: "/", name: "home", component: Login }
+    {
+        path: "/main",
+        name: "MainPage",
+        redirect: "/calendar",
+        component: MainPage
+    },
+    {
+        path: "/",
+        name: "home",
+        component: Login
+    },
+    {
+        path: "/event",
+        name: "EventCreate",
+        component: EventCreate
+    },
+    {
+        path: "/register",
+        name: "register",
+        component: Register
+    },
+    {
+        path: "/calendar",
+        component: CalendarComponent
+    },
+    {
+        path: "/test",
+        name: "testPage",
+        component: TestView
+    }
 ];
 
 const router = createRouter({
