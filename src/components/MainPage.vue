@@ -3,7 +3,7 @@
     <AppHeader></AppHeader>
     <AppSideBar></AppSideBar>
     <v-main class="no-top-margin">
-      <CalendarComponent></CalendarComponent>
+      <router-view/>
     </v-main>
   </v-app>
 </template>
@@ -11,7 +11,7 @@
 <script setup>
 import AppSideBar from "@/components/layout/AppSideBar.vue";
 import AppHeader from "@/components/layout/AppHeader.vue";
-import CalendarComponent from "@/components/CalendarComponent.vue";
+// import CalendarComponent from "@/components/CalendarComponent.vue";
 </script>
 
 <style scoped>
