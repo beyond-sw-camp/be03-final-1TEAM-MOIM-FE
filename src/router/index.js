@@ -3,7 +3,6 @@ import MainPage from "@/components/MainPage.vue";
 import Register from "@/views/RegisterView.vue";
 import Login from "@/views/LoginView.vue";
 import EventCreate from "@/components/EventCreate.vue";
-// import { EisenhowerMatrixRouter } from "./EisenhowerMatrixRouter";
 import CalendarComponent from "@/components/CalendarComponent.vue";
 import EisenhowerMatrix from "@/views/EisenhowerMatrix.vue";
 

@@ -5,9 +5,9 @@
       <v-row class="flex-nowrap">
         <v-col cols="12" class="d-flex flex-column">
           <!-- Horizontal labels -->
-          <v-row>
-            <v-col cols="6" class="d-flex justify-end align-end pr-2 label-horizontal">긴급</v-col>
-            <v-col cols="6" class="d-flex justify-start align-end pl-2 label-horizontal">긴급하지 않음</v-col>
+          <v-row class="emergency-text">
+            <v-col cols="6" class="d-flex justify-center align-end pr-2 label-horizontal">긴급</v-col>
+            <v-col cols="6" class="d-flex justify-center align-end pl-2 label-horizontal">긴급하지 않음</v-col>
           </v-row>
           
           <!-- 위의 2분면 -->
@@ -15,7 +15,8 @@
             <v-col cols="2" class="d-flex align-end flex-column label-vertical-container">
               <div class="label-vertical">중요</div>
             </v-col>
-            
+
+            <!-- 1분면 -->
             <v-col cols="5" class="border-right border-bottom pa-3">
               <v-card color="green" class="fill-height" dark>
                 <v-card-text class="subtitle-1">
@@ -25,6 +26,8 @@
                 </v-card-text>
               </v-card>
             </v-col>
+
+          <!-- 2분명 -->
             <v-col cols="5" class="border-bottom pa-3">
               <v-card color="orange" class="fill-height" dark>
                 <v-card-text class="subtitle-1">
@@ -35,6 +38,7 @@
               </v-card>
             </v-col>
             
+
             <v-col cols="2" class="d-flex align-end flex-column label-vertical-container">
               <div class="label-vertical">중요하지 않음</div>
             </v-col>
@@ -42,8 +46,10 @@
           
           <!-- 밑의 2분면 -->
           <v-row class="flex-grow-1">
-            <v-col cols="2"></v-col> <!-- Spacer for vertical labels -->
+            <v-col cols="2"></v-col> 
             <v-col cols="5" class="border-right pa-3">
+
+            <!-- 3분면 -->
               <v-card color="blue" class="fill-height" dark>
                 <v-card-text class="subtitle-1">
                 <div v-for="event in eventsQ3" :key="event.id" class="event-item">
@@ -52,6 +58,9 @@
                 </v-card-text>
               </v-card>
             </v-col>
+
+
+          <!-- 4분면 -->
             <v-col cols="5" class="pa-3">
               <v-card color="red" class="fill-height" dark>
                 <v-card-text class="subtitle-1">
@@ -156,7 +165,7 @@ export default {
 <style scoped>
 .EisenhowerParent {
   position: absolute; 
-  width: 70%;
+  width: 100%;
   height: auto%; 
   right: 5%; /* 오른쪽 끝에 위치 사이드바 위치에 따라 바꾸기!!! */
   top: 10vh; /* 헤더의 높이값에따라 바꾸기!!! */
@@ -175,8 +184,8 @@ export default {
 }
 
 .label-vertical {
-  writing-mode: tb-rl; /* Vertical writing mode */
-  transform: rotate(-0deg); /* Rotate the text to display it from top to bottom */
+  writing-mode: tb-rl;
+
 }
 
 .label-vertical-container {
@@ -185,6 +194,7 @@ export default {
 
 .label-horizontal {
   font-size: 1.25rem; /* Font size for horizontal labels */
+  
 }
 
 .fill-height {
@@ -192,6 +202,9 @@ export default {
 }
 .event-item{
   font-size: 1.25rem;
+}
+.emergency-text{
+  padding-left: 10%;
 }
 
 </style>
