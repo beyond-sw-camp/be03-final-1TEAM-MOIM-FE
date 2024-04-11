@@ -18,7 +18,7 @@
 
             <!-- 1분면 -->
             <v-col cols="5" class="border-right border-bottom pa-3">
-              <v-card color="green" class="fill-height" dark>
+              <v-card id="Q1" class="fill-height" dark>
                 <v-card-text class="subtitle-1">
                  <div v-for="event in eventsQ1" :key="event.id" class="event-item">
                   {{ event.title }} - {{ formatDate(event.startDate) }}
@@ -29,7 +29,7 @@
 
           <!-- 2분명 -->
             <v-col cols="5" class="border-bottom pa-3">
-              <v-card color="orange" class="fill-height" dark>
+              <v-card id="Q2" class="fill-height" dark>
                 <v-card-text class="subtitle-1">
                   <div v-for="event in eventsQ2" :key="event.id" class="event-item">
                     {{ event.title }} - {{ formatDate(event.startDate) }}
@@ -50,7 +50,7 @@
             <v-col cols="5" class="border-right pa-3">
 
             <!-- 3분면 -->
-              <v-card color="blue" class="fill-height" dark>
+              <v-card id="Q3" class="fill-height" dark>
                 <v-card-text class="subtitle-1">
                 <div v-for="event in eventsQ3" :key="event.id" class="event-item">
                   {{ event.title }} - {{ formatDate(event.startDate) }}
@@ -62,7 +62,7 @@
 
           <!-- 4분면 -->
             <v-col cols="5" class="pa-3">
-              <v-card color="red" class="fill-height" dark>
+              <v-card id="Q4" class="fill-height" dark>
                 <v-card-text class="subtitle-1">
                   <div v-for="event in eventsQ4" :key="event.id" class="event-item">
                     {{ event.title }} - {{ formatDate(event.startDate) }}
@@ -166,7 +166,7 @@ export default {
 .EisenhowerParent {
   position: absolute; 
   width: 100%;
-  height: auto%; 
+  height: 100%; 
   right: 5%; /* 오른쪽 끝에 위치 사이드바 위치에 따라 바꾸기!!! */
   top: 10vh; /* 헤더의 높이값에따라 바꾸기!!! */
   
@@ -198,13 +198,25 @@ export default {
 }
 
 .fill-height {
-  height: 50%; /* Each quadrant should fill half of its container's height */
+  height: 50; /* Each quadrant should fill half of its container's height */
 }
 .event-item{
   font-size: 1.25rem;
 }
 .emergency-text{
   padding-left: 10%;
+}
+#Q1{
+  background: #F3676B;
+}
+#Q2{
+  background : #F08D75
+}
+#Q3{
+  background : #8FDCB2
+}
+#Q4{
+  background : #4672D3
 }
 
 </style>
