@@ -3,6 +3,7 @@ import MainPage from "@/components/MainPage.vue";
 import Register from "@/views/RegisterView.vue";
 import Login from "@/views/LoginView.vue";
 import EventCreate from "@/components/EventCreate.vue";
+import { EisenhowerMatrixRouter } from "./EisenhowerMatrixRouter";
 
 const routes = [
     {path: "/", redirect: '/main'},
@@ -10,6 +11,9 @@ const routes = [
     {path: "/register", name: "register", component: Register},
     {path: "/login", name: "login", component: Login},
     {path: "/event", name: "EventCreate", component: EventCreate},
+    
+    
+    ...EisenhowerMatrixRouter
 ]
 
 const router = createRouter({
