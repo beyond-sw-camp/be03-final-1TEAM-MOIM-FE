@@ -2,31 +2,16 @@ import {createRouter, createWebHistory} from "vue-router";
 import MainPage from "@/components/MainPage.vue";
 import Register from "@/views/RegisterView.vue";
 import Login from "@/views/LoginView.vue";
-import EventCreate from "@/components/EventCreate.vue";
-import CalendarComponent from "@/components/CalendarComponent.vue";
+import CalendarComponent from "@/views/CalendarComponent.vue";
 import TestView from "@/views/TestView.vue";
+import EventDialog from "@/pages/event/EventDialog.vue";
 
 const routes = [
 
     {
-        path: "/",
-        redirect: '/main'
-    },
-    {
-        path: "/main",
-        name: "MainPage",
-        redirect: "/calendar",
-        component: MainPage
-    },
-    {
         path: "/login",
         name: "login",
         component: Login
-    },
-    {
-        path: "/event",
-        name: "EventCreate",
-        component: EventCreate
     },
     {
         path: "/register",
@@ -34,14 +19,32 @@ const routes = [
         component: Register
     },
     {
-        path: "/calendar",
-        component: CalendarComponent
+        path: "/",
+        redirect: '/main',
+        component: MainPage,
+        children: [
+            {
+                path: "main",
+                name: "MainPage",
+                component: {}
+            },
+            {
+                path: "calendar",
+                name: "calendar",
+                component: CalendarComponent
+            },
+            {
+                path: "test",
+                name: "testPage",
+                component: TestView
+            },
+            {
+                path: "event",
+                name: "EventDialog",
+                component: EventDialog
+            },
+        ]
     },
-    {
-        path: "/test",
-        name: "testPage",
-        component: TestView
-    }
 ];
 
 const router = createRouter({

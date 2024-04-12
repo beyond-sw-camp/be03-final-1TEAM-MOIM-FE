@@ -11,7 +11,6 @@
 <script setup>
 import AppSideBar from "@/components/layout/AppSideBar.vue";
 import AppHeader from "@/components/layout/AppHeader.vue";
-// import CalendarComponent from "@/components/CalendarComponent.vue";
 </script>
 
 <style scoped>

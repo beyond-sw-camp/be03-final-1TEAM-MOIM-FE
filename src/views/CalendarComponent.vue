@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import {useDate} from 'vuetify'
+// import {useDate} from 'vuetify'
 
 export default {
   data: () => ({
@@ -69,45 +69,45 @@ export default {
     ],
   }),
   mounted() {
-    const adapter = useDate()
-    this.getEvents({
-      start: adapter.startOfDay(adapter.startOfMonth(new Date())),
-      end: adapter.endOfDay(adapter.endOfMonth(new Date())),
-    })
+    // const adapter = useDate()
+    // this.getEvents({
+    //   start: adapter.startOfDay(adapter.startOfMonth(new Date())),
+    //   end: adapter.endOfDay(adapter.endOfMonth(new Date())),
+    // })
   },
   methods: {
-    getEvents({start, end}) {
-      const events = []
-
-      const min = start
-      const max = end
-      const days = (max.getTime() - min.getTime()) / 86400000
-      const eventCount = this.rnd(days, days + 20)
-
-      for (let i = 0; i < eventCount; i++) {
-        const allDay = this.rnd(0, 3) === 0
-        const firstTimestamp = this.rnd(min.getTime(), max.getTime())
-        const first = new Date(firstTimestamp - (firstTimestamp % 900000))
-        const secondTimestamp = this.rnd(2, allDay ? 288 : 8) * 900000
-        const second = new Date(first.getTime() + secondTimestamp)
-
-        events.push({
-          title: this.titles[this.rnd(0, this.titles.length - 1)],
-          start: first,
-          end: second,
-          color: this.colors[this.rnd(0, this.colors.length - 1)],
-          allDay: !allDay,
-        })
-      }
-
-      this.events = events
-    },
-    getEventColor(event) {
-      return event.color
-    },
-    rnd(a, b) {
-      return Math.floor((b - a + 1) * Math.random()) + a
-    },
+    // getEvents({start, end}) {
+    //   const events = []
+    //
+    //   const min = start
+    //   const max = end
+    //   const days = (max.getTime() - min.getTime()) / 86400000
+    //   const eventCount = this.rnd(days, days + 20)
+    //
+    //   for (let i = 0; i < eventCount; i++) {
+    //     const allDay = this.rnd(0, 3) === 0
+    //     const firstTimestamp = this.rnd(min.getTime(), max.getTime())
+    //     const first = new Date(firstTimestamp - (firstTimestamp % 900000))
+    //     const secondTimestamp = this.rnd(2, allDay ? 288 : 8) * 900000
+    //     const second = new Date(first.getTime() + secondTimestamp)
+    //
+    //     events.push({
+    //       title: this.titles[this.rnd(0, this.titles.length - 1)],
+    //       start: first,
+    //       end: second,
+    //       color: this.colors[this.rnd(0, this.colors.length - 1)],
+    //       allDay: !allDay,
+    //     })
+    //   }
+    //
+    //   this.events = events
+    // },
+    // getEventColor(event) {
+    //   return event.color
+    // },
+    // rnd(a, b) {
+    //   return Math.floor((b - a + 1) * Math.random()) + a
+    // },
   },
 }
 </script>
