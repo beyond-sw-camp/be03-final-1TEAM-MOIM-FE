@@ -9,14 +9,18 @@ import TestView from "@/views/TestView.vue";
 const routes = [
 
     {
+        path: "/",
+        redirect: '/main'
+    },
+    {
         path: "/main",
         name: "MainPage",
         redirect: "/calendar",
         component: MainPage
     },
     {
-        path: "/",
-        name: "home",
+        path: "/login",
+        name: "login",
         component: Login
     },
     {
