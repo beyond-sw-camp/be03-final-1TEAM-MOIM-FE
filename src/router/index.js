@@ -3,10 +3,10 @@ import MainPage from "@/components/MainPage.vue";
 import Register from "@/views/RegisterView.vue";
 import Login from "@/views/LoginView.vue";
 import Oauth2Redirect from "@/components/Oauth2Redirect.vue";
-import EventCreate from "@/components/EventCreate.vue";
 import CalendarComponent from "@/views/CalendarComponent.vue";
 import EventDialog from "@/pages/event/EventDialog.vue";
 import EisenhowerMatrix from "@/views/EisenhowerMatrix.vue";
+import DialogTestView from "@/views/DialogTestView.vue";
 
 const routes = [
     {
@@ -47,11 +47,6 @@ const routes = [
                 component: CalendarComponent
             },
             {
-                path: "test",
-                name: "testPage",
-                component: TestView
-            },
-            {
                 path: "event",
                 name: "EventDialog",
                 component: EventDialog
@@ -60,6 +55,14 @@ const routes = [
                 path: "EisenhowerMatrix",
                 name: "EisenhowerMatrix",
                 component: EisenhowerMatrix
+            },
+
+
+            // 공통 다이얼로그 테스트를 위한 라우팅
+            {
+                path: "dialogTestView",
+                name: "dialogTestView",
+                component: DialogTestView
             },
         ]
     },
