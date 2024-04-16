@@ -118,8 +118,8 @@ export default {
             try {
                 const response = await axios.post(`${process.env.VUE_APP_API_BASE_URL}/login`, loginData);
                 console.log(response);
-                const accessToken = response.data.access_token;
-                const refreshToken = response.data.refresh_token;
+                const accessToken = response.data.Authorization;
+                const refreshToken = response.data.Authorization_Refresh;
                 if (accessToken && refreshToken){
                     const decodedAccessToken = jwtDecode(accessToken);
                     localStorage.setItem("accessToken", accessToken);
@@ -134,6 +134,9 @@ export default {
                 console.error(error);
                 alert(error.response.data);
             }
+        },
+        googleLogin(){
+            window.location.href = `${process.env.VUE_APP_API_BASE_URL}/oauth2/authorization/google?redirect_uri=http://localhost:8081/oauth2/redirect`;
         }
     }
 };
