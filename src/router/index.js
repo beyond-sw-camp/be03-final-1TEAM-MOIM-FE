@@ -5,6 +5,7 @@ import Login from "@/views/LoginView.vue";
 import CalendarComponent from "@/views/CalendarComponent.vue";
 import TestView from "@/views/TestView.vue";
 import EventDialog from "@/pages/event/EventDialog.vue";
+import EisenhowerMatrix from "@/views/EisenhowerMatrix.vue";
 
 const routes = [
 
@@ -42,6 +43,11 @@ const routes = [
                 path: "event",
                 name: "EventDialog",
                 component: EventDialog
+            },
+            {
+                path: "EisenhowerMatrix",
+                name: "EisenhowerMatrix",
+                component: EisenhowerMatrix
             },
         ]
     },
