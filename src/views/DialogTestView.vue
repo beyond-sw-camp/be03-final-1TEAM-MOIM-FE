@@ -4,6 +4,8 @@
         ref="dialog"
         title="예시 타이틀"
         message="이 곳에 메시지를 커스텀해서 넣으면 됩니다."
+        confirmText="히히 확인"
+        cancelText="히히 취소"
         @confirm="performAction"
     />
     <v-container>

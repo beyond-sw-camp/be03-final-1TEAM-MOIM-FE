@@ -8,8 +8,8 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="green darken-1" text @click="dialog = false">취소</v-btn>
-        <v-btn color="green darken-1" text @click="confirm">확인</v-btn>
+        <v-btn color="green darken-1" text @click="confirm">{{ confirmText }}</v-btn>
+        <v-btn color="green darken-1" text @click="dialog = false">{{ cancelText }}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -20,6 +20,14 @@ export default {
   props: {
     title: String,
     message: String,
+    confirmText: {
+      type: String,
+      default: '확인'
+    },
+    cancelText: {
+      type: String,
+      default: '취소'
+    },
   },
   data() {
     return {
