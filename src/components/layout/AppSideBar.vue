@@ -17,6 +17,7 @@
       <v-list-item prepend-icon="mdi-folder" title="My Files" value="myfiles"></v-list-item>
       <v-list-item prepend-icon="mdi-account-multiple" title="Shared with me" value="shared"></v-list-item>
       <v-list-item prepend-icon="mdi-star" title="Starred" value="starred"></v-list-item>
+      <v-list-item prepend-icon="mdi-widgets" title="일정 생성" value="createEvent" @click="createEventClicked"></v-list-item>
       <v-list-item prepend-icon="mdi-view-dashboard" title="Eisenhower Matrix" @click="goToEisenhowerMatrix"></v-list-item>
       <v-list-item prepend-icon="mdi-calendar" title="Calendar" @click="goTo('calendar')"></v-list-item>
     </v-list>
@@ -26,9 +27,26 @@
 </template>
 
 <script>
+
+import {useMainStore} from "@/stores";
+
 export default {
   name: "AppSidebar",
+  setup() {
+    const mainStore = useMainStore();
+    return {
+      mainStore
+    }
+  },
   methods: {
+    eisenhowerMatrixClicked() {
+      console.log("아이젠하워 매트릭스 클릭!")
+      this.$router.push('/test');
+    },
+    createEventClicked() {
+      console.log("일정 생성 클릭");
+      this.mainStore.openDialog();
+    },
     goTo(route) {
       this.$router.push({ name: route });
     },
