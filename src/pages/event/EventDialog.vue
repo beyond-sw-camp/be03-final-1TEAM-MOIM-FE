@@ -166,9 +166,9 @@ export default {
       console.log("토큰: " + TOKEN);
       console.log("이메일: " + email);
       console.log("url: " + url);
-      console.log("alarmSetting을 알아보자: " + JSON.stringify(alarmSetting));
-      console.log("alarmSetting을 알아보자: " + typeof alarmSetting);
-      console.log("alarmSetting을 알아보자: " + typeof alarmSetting);
+      // console.log("alarmSetting을 알아보자: " + JSON.stringify(alarmSetting));
+      // console.log("alarmSetting을 알아보자: " + typeof alarmSetting);
+      // console.log("alarmSetting을 알아보자: " + typeof alarmSetting);
 
 
       const formData = new FormData();
@@ -180,7 +180,7 @@ export default {
       formData.append('place', this.place);
       formData.append('matrix', this.radios);
       formData.append('alarmYn', alarmYn);
-      formData.append('alarmRequest', JSON.stringify(alarmSetting));
+      // formData.append('alarmRequest', JSON.stringify(alarmSetting));
 
       if (this.files && this.files.length > 0) {
         // 우선 단일 파일만 전송할 수 있도록 설정
