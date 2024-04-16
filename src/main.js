@@ -1,15 +1,13 @@
-import {loadFonts} from './plugins/webfontloader'
-import {createApp} from 'vue'
+import {loadFonts} from './plugins/webfontloader';
+import {createApp} from 'vue';
 import {createPinia} from 'pinia';
-
-import App from './App.vue'
-import router from './router'
-import vuetify from './plugins/vuetify'
+import App from './App.vue';
+import router from './router';
+import vuetify from './plugins/vuetify';
 import token from './plugins/tokenPlugin';
-import {loadFonts} from './plugins/webfontloader'
 import axios from 'axios';
 import VueDatePicker from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css'
+import '@vuepic/vue-datepicker/dist/main.css';
 
 loadFonts()
 

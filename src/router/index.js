@@ -3,7 +3,6 @@ import MainPage from "@/components/MainPage.vue";
 import Register from "@/views/RegisterView.vue";
 import Login from "@/views/LoginView.vue";
 import Oauth2Redirect from "@/components/Oauth2Redirect.vue";
-import EventCreate from "@/components/EventCreate.vue";
 import CalendarComponent from "@/views/CalendarComponent.vue";
 import EventDialog from "@/pages/event/EventDialog.vue";
 import EisenhowerMatrix from "@/views/EisenhowerMatrix.vue";
@@ -45,11 +44,6 @@ const routes = [
                 path: "calendar",
                 name: "calendar",
                 component: CalendarComponent
-            },
-            {
-                path: "test",
-                name: "testPage",
-                component: TestView
             },
             {
                 path: "event",
