@@ -20,6 +20,7 @@
       <v-list-item prepend-icon="mdi-widgets" title="일정 생성" value="createEvent" @click="createEventClicked"></v-list-item>
       <v-list-item prepend-icon="mdi-view-dashboard" title="Eisenhower Matrix" @click="goToEisenhowerMatrix"></v-list-item>
       <v-list-item prepend-icon="mdi-calendar" title="Calendar" @click="goTo('calendar')"></v-list-item>
+      <v-list-item prepend-icon="mdi-calendar" title="다이얼로그 테스트" @click="goTo('dialogTestView')"></v-list-item>
     </v-list>
   </v-navigation-drawer>
 
@@ -39,10 +40,6 @@ export default {
     }
   },
   methods: {
-    eisenhowerMatrixClicked() {
-      console.log("아이젠하워 매트릭스 클릭!")
-      this.$router.push('/test');
-    },
     createEventClicked() {
       console.log("일정 생성 클릭");
       this.mainStore.openDialog();
