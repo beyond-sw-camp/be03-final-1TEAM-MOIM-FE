@@ -1,20 +1,145 @@
 <template>
-  <v-app-bar title="MOIM" @click="homeClicked">
+  <v-app-bar
+      color="teal-darken-4"
+      image="https://picsum.photos/seed/picsum/1920/1080"
+  >
+
+    <template v-slot:image>
+      <v-img
+          gradient="to top right, rgba(255, 209, 220, 0.8), rgba(255,209,220,0.8)"
+      ></v-img>
+    </template>
+
+    <template v-slot:prepend>
+      <v-app-bar-nav-icon></v-app-bar-nav-icon>
+    </template>
+
+    <v-app-bar-title>MOIM</v-app-bar-title>
+
+    <v-spacer></v-spacer>
+
+    <v-text-field
+        @focus="searchClosed=false"
+        @blur="searchClosed=true"
+        v-model="searchQuery"
+        placeholder="일정 검색"
+        prepend-inner-icon="mdi-magnify"
+        class="expanding-search mt-6"
+        :class="{ 'closed': searchClosed && !searchQuery }"
+        filled
+        dense
+        clearable
+        @keydown.enter="searchEvents"
+        @click:append="searchEvents"
+    ></v-text-field>
+
+    <v-btn icon>
+      <v-icon>mdi-dots-vertical</v-icon>
+    </v-btn>
   </v-app-bar>
+
+<!--  <v-main class="pt-0 main-content">-->
+<!--    <v-container>-->
+<!--      <v-expand-transition>-->
+<!--        <v-card class="mx-auto my-2" max-width="400" v-show="showResults" flat>-->
+<!--          <v-list dense>-->
+<!--            <v-list-item-->
+<!--                v-for="event in searchResults"-->
+<!--                :key="event.id"-->
+<!--                @click="showResults = false"-->
+<!--                clickable-->
+<!--            >-->
+<!--              <v-list-item-content>-->
+<!--                <v-list-item-title>{{ event.title }}</v-list-item-title>-->
+
+<!--                <v-list-item-subtitle>{{-->
+<!--                    formatDate(event.startDate)-->
+<!--                  }}</v-list-item-subtitle>-->
+<!--              </v-list-item-content>-->
+<!--            </v-list-item>-->
+
+<!--            <v-list-item v-if="searchResults.length === 0">-->
+<!--              <v-list-item-content>-->
+<!--                <v-list-item-title class="text-center"-->
+<!--                >검색하신 이벤트가 없습니다.</v-list-item-title-->
+<!--                >-->
+<!--              </v-list-item-content>-->
+<!--            </v-list-item>-->
+<!--          </v-list>-->
+<!--        </v-card>-->
+<!--      </v-expand-transition>-->
+<!--    </v-container>-->
+<!--  </v-main>-->
 </template>
 
 <script>
+import axios from "axios";
+import { useSearchStore } from '@/stores/searchStore'
+
 export default {
-  name: "AppSidebar",
+  name: "AppHeader",
+
+  data() {
+    return {
+      searchClosed: true,
+      searchQuery: null,
+      authToken: this.getAuthToken(),
+    };
+  },
+
   methods: {
-    homeClicked() {
-      console.log("홈페이지 클릭!");
-      this.$router.push('/calendar')
-    }
-  }
-}
+    getAuthToken() {
+      const token = localStorage.getItem("accessToken");
+      if (!token) {
+        alert("로그인 후 이용해 주세요");
+        this.$router.push({name: "login"});
+        return "";
+      }
+      return token;
+    },
+
+    async searchEvents() {
+      // 토큰 관련 에러 처리
+      if (!this.authToken) {
+        console.error("Authentication token is missing");
+        return;
+      }
+      // 검색어를 입력하지 않은 경우
+      if (!this.searchQuery) return;
+
+      const headers = {
+        Authorization: `Bearer ${this.authToken}`
+      };
+      const url = `${process.env.VUE_APP_API_BASE_URL}/api/events/search/${this.searchQuery}`;
+      const searchStore = useSearchStore();
+
+      try {
+        const response = await axios.get(url, {headers});
+        if (response.data.success && response.data.data) {
+          searchStore.setResults(response.data.data)
+        } else {
+          searchStore.setResults([]);
+        }
+        // 검색 이후 검색 결과 페이지로 이동함
+        this.$router.push({name: "Search"});
+      } catch (error) {
+        console.error("Error occurred when searching events: ", error);
+        searchStore.setResults([]);
+      }
+    },
+  },
+};
 </script>
 
-<style scoped>
-
+<style lang="sass">
+  .v-input.expanding-search
+    transition: 0.3s
+    .v-input__slot
+      cursor: pointer !important
+      &:before, &:after
+        border-color: transparent !important
+    &.closed
+      max-width: 45px
+      .v-input__slot
+        background: transparent !important
 </style>
