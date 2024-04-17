@@ -11,6 +11,7 @@
     "@babel/plugin-transform-class-properties": "^7.24.1",
     "@fullcalendar/core": "^6.1.11",
     "@fullcalendar/daygrid": "^6.1.11",
+    "@fullcalendar/timegrid": "^6.1.10",
     "@fullcalendar/interaction": "^6.1.11",
     "@fullcalendar/vue3": "^6.1.11",
     "@mdi/font": "5.9.55",
