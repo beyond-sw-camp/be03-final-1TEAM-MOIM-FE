@@ -2,9 +2,10 @@
   <div>
     <h1>Search Results</h1>
     <div>
-      <ul>
+      <ul v-if="results.length > 0">
         <li v-for="result in results" :key="result.id">{{ result.title }}</li>
       </ul>
+      <p v-else>검색 결과가 없습니다.</p>
     </div>
   </div>
 </template>

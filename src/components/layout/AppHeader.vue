@@ -3,7 +3,6 @@
       color="teal-darken-4"
       image="https://picsum.photos/seed/picsum/1920/1080"
   >
-
     <template v-slot:image>
       <v-img
           gradient="to top right, rgba(255, 209, 220, 0.8), rgba(255,209,220,0.8)"
@@ -37,39 +36,6 @@
       <v-icon>mdi-dots-vertical</v-icon>
     </v-btn>
   </v-app-bar>
-
-<!--  <v-main class="pt-0 main-content">-->
-<!--    <v-container>-->
-<!--      <v-expand-transition>-->
-<!--        <v-card class="mx-auto my-2" max-width="400" v-show="showResults" flat>-->
-<!--          <v-list dense>-->
-<!--            <v-list-item-->
-<!--                v-for="event in searchResults"-->
-<!--                :key="event.id"-->
-<!--                @click="showResults = false"-->
-<!--                clickable-->
-<!--            >-->
-<!--              <v-list-item-content>-->
-<!--                <v-list-item-title>{{ event.title }}</v-list-item-title>-->
-
-<!--                <v-list-item-subtitle>{{-->
-<!--                    formatDate(event.startDate)-->
-<!--                  }}</v-list-item-subtitle>-->
-<!--              </v-list-item-content>-->
-<!--            </v-list-item>-->
-
-<!--            <v-list-item v-if="searchResults.length === 0">-->
-<!--              <v-list-item-content>-->
-<!--                <v-list-item-title class="text-center"-->
-<!--                >검색하신 이벤트가 없습니다.</v-list-item-title-->
-<!--                >-->
-<!--              </v-list-item-content>-->
-<!--            </v-list-item>-->
-<!--          </v-list>-->
-<!--        </v-card>-->
-<!--      </v-expand-transition>-->
-<!--    </v-container>-->
-<!--  </v-main>-->
 </template>
 
 <script>
