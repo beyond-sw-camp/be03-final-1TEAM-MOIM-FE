@@ -40,19 +40,6 @@ export default {
       },
     }
   },
-  // mounted() {
-  //   const now = new Date();
-  //   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-  //   const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-  //   console.log(startOfMonth, "mounted startofmonth ", endOfMonth, " ")
-
-  //   this.handleDatesSet({
-  //     start: startOfMonth,
-  //     end: endOfMonth,
-  //     startStr: startOfMonth.toISOString(),
-  //     endStr: endOfMonth.toISOString(),
-  //   });
-  // },
   methods: {
     // 날짜 누르면 이벤트 등록하게 바꾸기
     handleDateSelect(selectInfo) {
@@ -80,8 +67,11 @@ export default {
     async fetchEvents({ startStr }) {
       // 날짜 정보에서 연도와 월 추출
       const startDate = new Date(startStr);
+      console.log("시작일자", startDate)
+      const selectDate = new Date(startDate.setDate(startDate.getDate() + 7));
+      console.log("중간이라고 생각함" ,selectDate)
       const year = startDate.getFullYear();
-      const month = startDate.getMonth() + 2;
+      const month = startDate.getMonth() + 1;
       console.log(year, 'fetchevent year ', month, "fetchevent month ")
       try {
         const token = localStorage.getItem("accessToken");
@@ -104,13 +94,6 @@ export default {
             end: new Date(event.endDate),
           }));
         this.events = events;
-        // 이벤트 데이터 변환 및 상태 업데이트
-        // this.events = getEvents.map(event => ({
-        //   title: event.title,
-        //   id: event.id,
-        //   start: new Date(event.startDate),
-        //   end: new Date(event.endDate),
-        // }));
 
         // FullCalendar에 이벤트 업데이트
         this.$refs.fullCalendar.getApi().removeAllEvents();
