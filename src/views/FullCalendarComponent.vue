@@ -8,6 +8,7 @@
     </div>
   </div>
   <EventDetailDialog ref="isVisible"></EventDetailDialog>
+  <EventDialog ref="isDialogOpen"></EventDialog>
 
 </template>
 
@@ -17,23 +18,17 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import EventDetailDialog from '../pages/event/EventDetailDialog.vue'
+import EventDialog from '../pages/event/EventDialog.vue'
 import axios from 'axios';
 
 export default {
   components: {
     FullCalendar, // make the <FullCalendar> tag available
-    EventDetailDialog
+    EventDetailDialog,
+    EventDialog
   },
-  // watch: {
-  //   selectedEventId(newVal) {
-  //     this.$nextTick(() => {
-  //       this.$refs.isVisible.eventId = newVal;
-  //     });
-  //   }
-  // },
   data() {
     return {
-      selectedEventId: '',
       events: [],
       calendarOptions: {
         plugins: [ dayGridPlugin, timeGridPlugin, interactionPlugin ],
@@ -54,26 +49,24 @@ export default {
   methods: {
      // 일정 누르면 상세보기로 바꾸기
     handleEventClick(clickInfo) {
-      this.selectedEventId = clickInfo.event.id;
-      console.log(clickInfo.event.id)
-      console.log(this.selectedEventId)
       this.$refs.isVisible.openDialog(clickInfo.event.id)
     },
     // 날짜 누르면 이벤트 등록하게 바꾸기
     handleDateSelect(selectInfo) {
-      let title = prompt('Please enter a new title for your event')
-      let calendarApi = selectInfo.view.calendar
+      this.$refs.isDialogOpen.openDialog(selectInfo);
+      // let title = prompt('Please enter a new title for your event')
+      // let calendarApi = selectInfo.view.calendar
 
-      calendarApi.unselect() // clear date selection
+      // calendarApi.unselect() // clear date selection
 
-      if (title) {
-        calendarApi.addEvent({
-          title,
-          start: selectInfo.startStr,
-          end: selectInfo.endStr,
-          allDay: selectInfo.allDay
-        })
-      }
+      // if (title) {
+      //   calendarApi.addEvent({
+      //     title,
+      //     start: selectInfo.startStr,
+      //     end: selectInfo.endStr,
+      //     allDay: selectInfo.allDay
+      //   })
+      // }
     },
     async fetchEvents({ startStr }) {
       // 날짜 정보에서 연도와 월 추출

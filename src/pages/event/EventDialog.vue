@@ -110,36 +110,53 @@
 
 <script>
 import axios from 'axios';
-import {useMainStore} from '@/stores'
+// import {useMainStore} from '@/stores'
 import {jwtDecode} from "jwt-decode";
 
 export default {
-  setup() {
-    const mainStore = useMainStore();
-    const isDialogOpen = mainStore.isDialogOpen;
-    const closeDialog = mainStore.closeDialog;
+  // setup() {
+  //   const mainStore = useMainStore();
+  //   const isDialogOpen = mainStore.isDialogOpen;
+  //   const closeDialog = mainStore.closeDialog;
 
+  //   return {
+  //     mainStore,
+  //     isDialogOpen,
+  //     closeDialog
+  //   };
+  // },
+
+  data () {
     return {
-      mainStore,
-      isDialogOpen,
-      closeDialog
-    };
+      isDialogOpen: false,
+      title: '',
+      memo: '',
+      place: '',
+      radios: null,
+      startDateTime: null,
+      endDateTime: null,
+      alertQuantity: null,
+      timeType: '분',
+      timeTypes: ['분', '시간', '일'],
+      files: [],
+    } 
   },
 
-  data: () => ({
-    title: '',
-    memo: '',
-    place: '',
-    radios: null,
-    startDateTime: null,
-    endDateTime: null,
-    alertQuantity: null,
-    timeType: '분',
-    timeTypes: ['분', '시간', '일'],
-    files: [],
-  }),
-
   methods: {
+    openDialog(selectInfo) {
+      // string 타입의 날짜를 Date 객체로 변환
+      let dateObject = new Date(selectInfo.endStr);
+      // 1일을 빼기 위해 24시간 * 60분 * 60초 * 1000밀리초를 빼줍니다
+      dateObject.setTime(dateObject.getTime() - (1 * 24 * 60 * 60 * 1000));
+      // 변경된 날짜를 string으로 변환
+      let newDateString = dateObject.toISOString().split('T')[0];
+      this.startDateTime = selectInfo.startStr + "T00:00:00";
+      this.endDateTime = newDateString + "T00:00:00";
+      this.isDialogOpen = true;
+    },
+    closeDialog() {
+      this.isDialogOpen = false;
+    },
     async createEvent() {
       const TOKEN = localStorage.getItem('accessToken');
       const email = jwtDecode(TOKEN).email;

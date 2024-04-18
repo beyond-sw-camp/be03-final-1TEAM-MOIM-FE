@@ -1,16 +1,12 @@
 <template>
-  <v-dialog v-model="isVisible" max-width="600" :persistent="true">
+  <v-dialog v-model="isVisible" max-width="600">
     <v-card class="pa-4">
       <v-card-title>
         <v-icon class="mr-2">mdi-calendar-check</v-icon>
-        일정 상세 정보
+        {{title}}
       </v-card-title>
       <v-card-text>
         <v-row dense>
-          <v-col cols="12" md="2"><h4>제목</h4></v-col>
-          <v-col cols="12" md="10">
-            <input type="text" :value="title" readonly>
-          </v-col>
           <v-col cols="12" md="2"><h4>시작일</h4></v-col>
           <v-col cols="12" md="10">
             <input type="datetime-local" :value="startDateTime" readonly>
@@ -23,7 +19,7 @@
           <v-col cols="12" md="10">
             <input type="text" :value="place" readonly>
           </v-col>
-          <v-col cols="12" md="2"><h4>아이젠하워 매트릭스 중요도</h4></v-col>
+          <v-col cols="12" md="2"><h4>중요도</h4></v-col>
           <v-col cols="12" md="10">
             <input type="text" :value="getEisenhowerMatrixLabel(radios)" readonly>
           </v-col>
@@ -69,11 +65,11 @@ export default {
       // Dialog 상태
       isVisible: false,
       // 상세 정보를 위한 데이터
-      title: 'Vue.js Workshop',
-      startDateTime: '2024-04-20T09:00',
-      endDateTime: '2024-04-20T17:00',
-      place: 'Seoul, South Korea',
-      radios: 'Q2', // Eisenhower Matrix 선택 값
+      title: '',
+      startDateTime: '',
+      endDateTime: '',
+      place: '',
+      radios: '', // Eisenhower Matrix 선택 값
       alertQuantity: '30',
       timeType: 'minutes',
       memo: 'Bring your own laptop.',
