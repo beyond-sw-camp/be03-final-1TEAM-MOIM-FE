@@ -143,7 +143,7 @@ export default {
   },
 
   methods: {
-    openDialog(selectInfo) {
+    selectOpenDialog(selectInfo) {
       // string 타입의 날짜를 Date 객체로 변환
       let dateObject = new Date(selectInfo.endStr);
       // 1일을 빼기 위해 24시간 * 60분 * 60초 * 1000밀리초를 빼줌
@@ -152,6 +152,9 @@ export default {
       let newDateString = dateObject.toISOString().split('T')[0];
       this.startDateTime = selectInfo.startStr + "T00:00:00";
       this.endDateTime = newDateString + "T00:00:00";
+      this.isDialogOpen = true;
+    },
+    openDialog() {
       this.isDialogOpen = true;
     },
     closeDialog() {

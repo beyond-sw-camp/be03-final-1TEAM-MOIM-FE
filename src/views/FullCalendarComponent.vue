@@ -7,8 +7,8 @@
       </v-sheet>
     </div>
   </div>
-  <EventDetailDialog ref="isVisible"></EventDetailDialog>
-  <EventDialog ref="isDialogOpen"></EventDialog>
+  <EventDetailDialog ref="EventDetail"></EventDetailDialog>
+  <EventDialog ref="EventCreate"></EventDialog>
 
 </template>
 
@@ -49,24 +49,11 @@ export default {
   methods: {
      // 일정 누르면 상세보기로 바꾸기
     handleEventClick(clickInfo) {
-      this.$refs.isVisible.openDialog(clickInfo.event.id)
+      this.$refs.EventDetail.openDialog(clickInfo.event.id)
     },
     // 날짜 누르면 이벤트 등록하게 바꾸기
     handleDateSelect(selectInfo) {
-      this.$refs.isDialogOpen.openDialog(selectInfo);
-      // let title = prompt('Please enter a new title for your event')
-      // let calendarApi = selectInfo.view.calendar
-
-      // calendarApi.unselect() // clear date selection
-
-      // if (title) {
-      //   calendarApi.addEvent({
-      //     title,
-      //     start: selectInfo.startStr,
-      //     end: selectInfo.endStr,
-      //     allDay: selectInfo.allDay
-      //   })
-      // }
+      this.$refs.EventCreate.selectOpenDialog(selectInfo);
     },
     async fetchEvents({ startStr }) {
       // 날짜 정보에서 연도와 월 추출
