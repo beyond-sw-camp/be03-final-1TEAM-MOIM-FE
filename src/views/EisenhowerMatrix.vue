@@ -19,13 +19,13 @@
           </v-col>
 
           <!-- 1분면 -->
-          <v-col cols="5" class="border-right border-bottom pa-3">
+          <v-col cols="5" class="border-right border-bottom pa-3" focused>
             <v-card id="Q1" class="fill-height" dark>
               <draggable
                 class="drag-area"
                 :list="eventsQ1"
                 group="events"
-                @change="updateEvents"
+                @change="updateEventsTo1"
               >
                 <template #item="{ element }">
                   <div :key="element.id" class="event-item">
@@ -37,13 +37,13 @@
           </v-col>
 
           <!-- 2분명 -->
-          <v-col cols="5" class="border-bottom pa-3">
+          <v-col cols="5" class="border-bottom pa-3" focused>
             <v-card id="Q2" class="fill-height" dark>
               <draggable
                 class="drag-area"
                 :list="eventsQ2"
                 group="events"
-                @change="updateEvents"
+                @change="updateEventsTo2"
               >
                 <template #item="{ element }">
                   <div :key="element.id" class="event-item">
@@ -64,13 +64,13 @@
           </v-col>
 
           <!-- 3분면 -->
-          <v-col cols="5" class="border-right pa-3">
+          <v-col cols="5" class="border-right pa-3" focused>
             <v-card id="Q3" class="fill-height" dark>
               <draggable
                 class="drag-area"
                 :list="eventsQ3"
                 group="events"
-                @change="updateEvents"
+                @change="updateEventsTO3"
               >
                 <template #item="{ element }">
                   <div :key="element.id" class="event-item">
@@ -82,13 +82,13 @@
           </v-col>
 
           <!-- 4분면 -->
-          <v-col cols="5" class="pa-3">
+          <v-col cols="5" class="pa-3" focused>
             <v-card id="Q4" class="fill-height" dark>
               <draggable
                 class="drag-area"
                 :list="eventsQ4"
                 group="events"
-                @change="updateEvents"
+                @change="updateEventsTO4"
               >
                 <template #item="{ element }">
                   <div :key="element.id" class="event-item">
@@ -136,8 +136,36 @@ export default {
   },
 
   methods: {
-    updateEvents(event) {
-      console.log("Draggable event:", event);
+    async updateEventsTo1(event) {
+    //   if (!this.authToken) {
+    //     console.error("Authentication token is missing");
+    //     return;
+    //   }
+    //   const headers = {
+    //   Authorization: `Bearer ${this.authToken}`,
+    //   'Content-Type': 'application/json' // 이 부분을 추가하는 것이 좋습니다.
+    // };
+
+      const eventElement = event.added.element;
+      const eventId = eventElement.id;
+      console.log("이벤트의 아이디 ",eventId);
+
+      const url = `${process.env.VUE_APP_API_BASE_URL}/api/events/matrixUpdate/${eventId}/Q1`;
+
+      try {
+        const response = await axios.patch(url);
+        if (response.data.success && response.data.data) {
+          console.log("성공함");
+        } else {
+          console.error("실패함");
+        }
+      } catch (error) {
+        console.error(
+          "메트릭스 실패"
+          // `Error updating event matrix to ${newMatrix}:`,
+          // error.response ? error.response.data : "No response"
+        );
+      }
     },
     getAuthToken() {
       const token = localStorage.getItem("accessToken");
