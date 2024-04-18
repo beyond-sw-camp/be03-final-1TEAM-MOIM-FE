@@ -7,6 +7,7 @@
       </v-sheet>
     </div>
   </div>
+  <EventDetailDialog ref="isVisible" :eventId="selectedEventId"></EventDetailDialog>
 
 </template>
 
@@ -15,14 +16,17 @@ import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
+import EventDetailDialog from '../pages/event/EventDetailDialog.vue'
 import axios from 'axios';
 
 export default {
   components: {
-    FullCalendar // make the <FullCalendar> tag available
+    FullCalendar, // make the <FullCalendar> tag available
+    EventDetailDialog
   },
   data() {
     return {
+      selectedEventId: '',
       events: [],
       calendarOptions: {
         plugins: [ dayGridPlugin, timeGridPlugin, interactionPlugin ],
@@ -41,6 +45,13 @@ export default {
     }
   },
   methods: {
+     // 일정 누르면 상세보기로 바꾸기
+     handleEventClick(clickInfo) {
+      this.selectedEventId = clickInfo.event.id;
+      console.log(clickInfo.event.id)
+      console.log(this.selectedEventId)
+      this.$refs.isVisible.openDialog()
+    },
     // 날짜 누르면 이벤트 등록하게 바꾸기
     handleDateSelect(selectInfo) {
       let title = prompt('Please enter a new title for your event')
@@ -50,18 +61,11 @@ export default {
 
       if (title) {
         calendarApi.addEvent({
-          // id: createEventId(),
           title,
           start: selectInfo.startStr,
           end: selectInfo.endStr,
           allDay: selectInfo.allDay
         })
-      }
-    },
-    // 일정 누르면 상세보기로 바꾸기
-    handleEventClick(clickInfo) {
-      if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-        clickInfo.event.remove()
       }
     },
     async fetchEvents({ startStr }) {
