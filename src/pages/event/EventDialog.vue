@@ -110,36 +110,56 @@
 
 <script>
 import axios from 'axios';
-import {useMainStore} from '@/stores'
+// import {useMainStore} from '@/stores'
 import {jwtDecode} from "jwt-decode";
 
 export default {
-  setup() {
-    const mainStore = useMainStore();
-    const isDialogOpen = mainStore.isDialogOpen;
-    const closeDialog = mainStore.closeDialog;
+  // setup() {
+  //   const mainStore = useMainStore();
+  //   const isDialogOpen = mainStore.isDialogOpen;
+  //   const closeDialog = mainStore.closeDialog;
 
+  //   return {
+  //     mainStore,
+  //     isDialogOpen,
+  //     closeDialog
+  //   };
+  // },
+
+  data () {
     return {
-      mainStore,
-      isDialogOpen,
-      closeDialog
-    };
+      isDialogOpen: false,
+      title: '',
+      memo: '',
+      place: '',
+      radios: null,
+      startDateTime: null,
+      endDateTime: null,
+      alertQuantity: null,
+      timeType: '분',
+      timeTypes: ['분', '시간', '일'],
+      files: [],
+    } 
   },
 
-  data: () => ({
-    title: '',
-    memo: '',
-    place: '',
-    radios: null,
-    startDateTime: null,
-    endDateTime: null,
-    alertQuantity: null,
-    timeType: '분',
-    timeTypes: ['분', '시간', '일'],
-    files: [],
-  }),
-
   methods: {
+    selectOpenDialog(selectInfo) {
+      // string 타입의 날짜를 Date 객체로 변환
+      let dateObject = new Date(selectInfo.endStr);
+      // 1일을 빼기 위해 24시간 * 60분 * 60초 * 1000밀리초를 빼줌
+      dateObject.setTime(dateObject.getTime() - (1 * 24 * 60 * 60 * 1000));
+      // 변경된 날짜를 string으로 변환
+      let newDateString = dateObject.toISOString().split('T')[0];
+      this.startDateTime = selectInfo.startStr + "T00:00:00";
+      this.endDateTime = newDateString + "T00:00:00";
+      this.isDialogOpen = true;
+    },
+    openDialog() {
+      this.isDialogOpen = true;
+    },
+    closeDialog() {
+      this.isDialogOpen = false;
+    },
     async createEvent() {
       const TOKEN = localStorage.getItem('accessToken');
       const email = jwtDecode(TOKEN).email;
@@ -175,8 +195,8 @@ export default {
       formData.append('nickname', email);
       formData.append('title', this.title);
       formData.append('memo', this.memo);
-      formData.append('startDate', this.formatDate(this.startDateTime));
-      formData.append('endDate', this.formatDate(this.endDateTime));
+      formData.append('startDate', this.startDateTime);
+      formData.append('endDate', this.endDateTime);
       formData.append('place', this.place);
       formData.append('matrix', this.radios);
       formData.append('alarmYn', alarmYn);
@@ -195,12 +215,15 @@ export default {
       });
 
       this.closeDialog();
+      window.alert(this.title + " 일정이 생성되었습니다.")
+      window.location.reload();
     },
 
-    formatDate(dateTimeStr) {
-      const dateTime = new Date(dateTimeStr);
-      return dateTime.toISOString().slice(0,19);
-    },
+    // formatDate(dateTimeStr) {
+    //   const dateTime = new Date(dateTimeStr);
+    //   console.log("이게머야", dateTime.toISOString())
+    //   return dateTime.toISOString().slice(0,19);
+    // },
   }
 }
 </script>
