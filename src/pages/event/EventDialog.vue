@@ -146,7 +146,7 @@ export default {
     openDialog(selectInfo) {
       // string 타입의 날짜를 Date 객체로 변환
       let dateObject = new Date(selectInfo.endStr);
-      // 1일을 빼기 위해 24시간 * 60분 * 60초 * 1000밀리초를 빼줍니다
+      // 1일을 빼기 위해 24시간 * 60분 * 60초 * 1000밀리초를 빼줌
       dateObject.setTime(dateObject.getTime() - (1 * 24 * 60 * 60 * 1000));
       // 변경된 날짜를 string으로 변환
       let newDateString = dateObject.toISOString().split('T')[0];
@@ -192,8 +192,8 @@ export default {
       formData.append('nickname', email);
       formData.append('title', this.title);
       formData.append('memo', this.memo);
-      formData.append('startDate', this.formatDate(this.startDateTime));
-      formData.append('endDate', this.formatDate(this.endDateTime));
+      formData.append('startDate', this.startDateTime);
+      formData.append('endDate', this.endDateTime);
       formData.append('place', this.place);
       formData.append('matrix', this.radios);
       formData.append('alarmYn', alarmYn);
@@ -212,12 +212,15 @@ export default {
       });
 
       this.closeDialog();
+      window.alert(this.title + " 일정이 생성되었습니다.")
+      window.location.reload();
     },
 
-    formatDate(dateTimeStr) {
-      const dateTime = new Date(dateTimeStr);
-      return dateTime.toISOString().slice(0,19);
-    },
+    // formatDate(dateTimeStr) {
+    //   const dateTime = new Date(dateTimeStr);
+    //   console.log("이게머야", dateTime.toISOString())
+    //   return dateTime.toISOString().slice(0,19);
+    // },
   }
 }
 </script>
