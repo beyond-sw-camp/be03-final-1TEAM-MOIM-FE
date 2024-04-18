@@ -81,6 +81,8 @@ export default {
 
       try {
         const response = await axios.get(url, {headers});
+        console.log("!!!" + response.data.success);
+        console.log("!!!" + response.data.data);
         if (response.data.success && response.data.data) {
           searchStore.setResults(response.data.data)
         } else {

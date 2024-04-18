@@ -1,13 +1,42 @@
 <template>
-  <div>
-    <h1>Search Results</h1>
-    <div>
-      <ul v-if="results.length > 0">
-        <li v-for="result in results" :key="result.id">{{ result.title }}</li>
-      </ul>
-      <p v-else>검색 결과가 없습니다.</p>
-    </div>
-  </div>
+  <v-container>
+    <v-row justify="center" v-if="results.length > 0">
+      <v-col cols="12" v-for="result in results" :key="result.id">
+        <v-card
+            :title="result.title"
+            :subtitle="formatDate(result.startDate)"
+            class="mx-auto"
+            max-width="800"
+            link>
+          <template v-slot:prepend>
+            <v-btn
+                :disabled="!number"
+                class="circle-button"
+                color="primary"
+                @click="onClickButton"
+            >
+              {{ getDay(result.startDate) }}
+            </v-btn>
+          </template>
+          <template v-slot:append>
+            <v-list lines="one">
+              <v-list-item
+                  :title="'시작'"
+                  :subtitle="formatDateAndTime(result.startDate)"
+              />
+              <v-list-item
+                  :title="'종료'"
+                  :subtitle="formatDateAndTime(result.endDate)"
+              />
+            </v-list>
+          </template>
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-row justify="center" v-else>
+      <p>검색 결과가 없습니다.</p>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -19,13 +48,59 @@ export default {
     const searchStore = useSearchStore();
     const results = computed(() => searchStore.results);
 
+    // 날짜 문자열을 받아서 "일"을 반환한다.
+    const getDay = (dateString) => {
+      const date = new Date(dateString);
+      return date.getDate();
+    }
+
+    // 날짜 문자열을 받아서 "YYYY년 m월, 요일" 형태로 반환한다.
+    const formatDate = (dateString) => {
+      const date = new Date(dateString);
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1; // getMonth()는 0에서 11까지의 값을 반환하기 때문에 1을 더한다.
+      const dayNames = ["일", "월", "화", "수", "목", "금", "토"];
+      const day = dayNames[date.getDay()];
+      return `${year}년 ${month}월, ${day}`;
+    }
+
+    // 날짜 문자열을 "연 월 일 오전|오후 시 분" 형태로 반환
+    const formatDateAndTime = (dateString) => {
+      const date = new Date(dateString);
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1; // getMonth()는 0에서 11까지의 값을 반환하기 때문에 1을 더한다.
+      const day = date.getDate();
+      let hours = date.getHours();
+      const minutes = date.getMinutes();
+
+      const ampm = hours >= 12 ? '오후' : '오전';
+
+      // 12시간제로 변환
+      hours = hours % 12;
+      hours = hours ? hours : 12; // hours가 0일 경우 12로 변경
+
+      return `${year}년 ${month}월 ${day}일 ${ampm} ${hours}:${minutes < 10 ? '0' + minutes : minutes}`;
+    }
+
     return {
-      results: results
+      results: results,
+      getDay: getDay,
+      formatDate: formatDate,
+      formatDateAndTime: formatDateAndTime
     }
   }
 }
 </script>
 
 <style>
-
+.circle-button {
+  border-radius: 50%; /* 원형 버튼을 만들기 위한 CSS */
+  min-width: 50px; /* 버튼의 최소 너비 */
+  min-height: 50px; /* 버튼의 최소 높이 */
+  width: 50px; /* 버튼의 너비를 고정값으로 설정 */
+  height: 50px; /* 버튼의 높이를 고정값으로 설정 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 </style>
