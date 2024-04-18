@@ -7,11 +7,9 @@
       </v-card-title>
       <v-card-text>
         <v-row dense>
-          <v-col cols="12" sm="12">
-            <v-text-field label="제목"
-                          :value="title"
-                          readonly>
-            </v-text-field>
+          <v-col cols="12" md="2"><h4>제목</h4></v-col>
+          <v-col cols="12" md="10">
+            <input type="text" :value="title" readonly>
           </v-col>
           <v-col cols="12" md="2"><h4>시작일</h4></v-col>
           <v-col cols="12" md="10">
@@ -21,29 +19,23 @@
           <v-col cols="12" md="10">
             <input type="datetime-local" :value="endDateTime" readonly>
           </v-col>
-          <v-col cols="12" sm="12">
-            <v-text-field label="장소"
-                          :value="place"
-                          readonly>
-            </v-text-field>
+          <v-col cols="12" md="2"><h4>장소</h4></v-col>
+          <v-col cols="12" md="10">
+            <input type="text" :value="place" readonly>
           </v-col>
-          <v-col cols="12" sm="12"><h4>아이젠하워 매트릭스 중요도</h4></v-col>
-          <v-col cols="12" sm="12">
-            <v-text-field :value="getEisenhowerMatrixLabel(radios)" readonly>
-            </v-text-field>
+          <v-col cols="12" md="2"><h4>아이젠하워 매트릭스 중요도</h4></v-col>
+          <v-col cols="12" md="10">
+            <input type="text" :value="getEisenhowerMatrixLabel(radios)" readonly>
           </v-col>
-          <v-col cols="12" md="2"><h4>알림</h4></v-col>
+          <!-- <v-col cols="12" md="2"><h4>알림</h4></v-col>
           <v-col cols="12" md="10">
             <v-text-field :value="`알림 ${alertQuantity} ${getTimeTypeLabel(timeType)}`" readonly>
             </v-text-field>
-          </v-col>
-          <v-col cols="12" md="12">
-            <v-text-field
-                label="메모"
-                :value="memo"
-                readonly>
-            </v-text-field>
-          </v-col>
+          </v-col> -->
+          <v-col cols="12" md="2"><h4>메모</h4></v-col>
+            <v-col cols="12" md="10">
+              <input type="text" :value="memo" readonly>
+            </v-col>
           <v-col cols="12" md="12">
             <!-- 파일 목록은 보여주되, 다운로드 링크나 뷰어를 제공할 수 있습니다. -->
             <!-- <v-subheader>첨부 파일</v-subheader> -->
@@ -68,15 +60,10 @@
 
 
 <script>
+import axios from 'axios';
+
 export default {
   props: ['eventId'],
-  watch: {
-    isVisible(newVal) {
-      if(!newVal) {
-        this.resetEventId();
-      }
-    }
-  },
   data() {
     return {
       // Dialog 상태
@@ -103,18 +90,37 @@ export default {
     };
   },
   methods: {
-    openDialog() {
+    async getEventDetail(eventId) {
+      try {
+        const token = localStorage.getItem("accessToken");
+        const headers = { Authorization: `Bearer ${token}` };
+        console.log(token)
+        if (token == null) {
+          alert("로그인이 필요합니다.");
+          this.$router.push({ name: "Login" });
+          return;
+        }
+        const response = await axios.get(`${process.env.VUE_APP_API_BASE_URL}/api/events/${eventId}`, { headers });
+        const eventDetail = response.data.data;
+        console.log(eventDetail)
+        this.startDateTime = eventDetail.startDate;
+        this.endDateTime = eventDetail.endDate;
+        this.radios = eventDetail.matrix;
+        this.title = eventDetail.title;
+        this.memo = eventDetail.memo;
+        this.place = eventDetail.place;
+
+
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    openDialog(eventId) {
       this.isVisible = true;
-      console.log("넘어온 이벤트 아이디", this.eventId)
-      this.$emit('resetEventId');
+      this.getEventDetail(eventId);
     },
     closeDialog() {
       this.isVisible = false;
-      this.resetEventId();
-      // this.$emit('update:isVisible', false);
-    },
-    resetEventId() {
-      this.$emit('resetEventId');
     },
     // Eisenhower Matrix 라벨 반환
     getEisenhowerMatrixLabel(value) {

@@ -7,7 +7,7 @@
       </v-sheet>
     </div>
   </div>
-  <EventDetailDialog ref="isVisible" :eventId="selectedEventId"></EventDetailDialog>
+  <EventDetailDialog ref="isVisible"></EventDetailDialog>
 
 </template>
 
@@ -24,6 +24,13 @@ export default {
     FullCalendar, // make the <FullCalendar> tag available
     EventDetailDialog
   },
+  // watch: {
+  //   selectedEventId(newVal) {
+  //     this.$nextTick(() => {
+  //       this.$refs.isVisible.eventId = newVal;
+  //     });
+  //   }
+  // },
   data() {
     return {
       selectedEventId: '',
@@ -46,11 +53,11 @@ export default {
   },
   methods: {
      // 일정 누르면 상세보기로 바꾸기
-     handleEventClick(clickInfo) {
+    handleEventClick(clickInfo) {
       this.selectedEventId = clickInfo.event.id;
       console.log(clickInfo.event.id)
       console.log(this.selectedEventId)
-      this.$refs.isVisible.openDialog()
+      this.$refs.isVisible.openDialog(clickInfo.event.id)
     },
     // 날짜 누르면 이벤트 등록하게 바꾸기
     handleDateSelect(selectInfo) {
