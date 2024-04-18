@@ -53,8 +53,6 @@
               </draggable>
             </v-card>
           </v-col>
-
-          <v-col cols="2"></v-col>
         </v-row>
 
         <!-- 밑의 2분면 -->
@@ -70,7 +68,7 @@
                 class="drag-area"
                 :list="eventsQ3"
                 group="events"
-                @change="updateEventsTO3"
+                @change="updateEventsTo3"
               >
                 <template #item="{ element }">
                   <div :key="element.id" class="event-item">
@@ -88,7 +86,7 @@
                 class="drag-area"
                 :list="eventsQ4"
                 group="events"
-                @change="updateEventsTO4"
+                @change="updateEventsTo4"
               >
                 <template #item="{ element }">
                   <div :key="element.id" class="event-item">
@@ -137,41 +135,156 @@ export default {
 
   methods: {
     async updateEventsTo1(event) {
-    //   if (!this.authToken) {
-    //     console.error("Authentication token is missing");
-    //     return;
-    //   }
-    //   const headers = {
-    //   Authorization: `Bearer ${this.authToken}`,
-    //   'Content-Type': 'application/json' // 이 부분을 추가하는 것이 좋습니다.
-    // };
+      console.log("이거시 이벤트다잉 " , event);
+  if (!this.authToken) {
+    console.error("Authentication token is missing");
+    return;
+  }
+  // 요소가 추가된 경우에만 처리
+  if (event.added) {
+    const eventElement = event.added.element;
+    if (!eventElement) {
+      console.error("Dragged element is missing");
+      return;
+    }
+    const eventId = eventElement.id;
+    console.log("이벤트의 아이디 ", eventId);
 
-      const eventElement = event.added.element;
-      const eventId = eventElement.id;
-      console.log("이벤트의 아이디 ",eventId);
+    const url = `${process.env.VUE_APP_API_BASE_URL}/api/events/matrixUpdate/${eventId}/Q1`;
+    const headers = {
+      Authorization: `Bearer ${this.authToken}`,
+      "Content-Type": "application/json",
+    };
 
-      const url = `${process.env.VUE_APP_API_BASE_URL}/api/events/matrixUpdate/${eventId}/Q1`;
-
-      try {
-        const response = await axios.patch(url);
-        if (response.data.success && response.data.data) {
-          console.log("성공함");
-        } else {
-          console.error("실패함");
-        }
-      } catch (error) {
-        console.error(
-          "메트릭스 실패"
-          // `Error updating event matrix to ${newMatrix}:`,
-          // error.response ? error.response.data : "No response"
-        );
+    try {
+      const response = await axios.patch(url, {}, { headers });
+      if (response.data.success && response.data.data) {
+        console.log("수정 요청 성공함");
+      } else {
+        console.error("수정 요청 실패함");
       }
-    },
+    } catch (error) {
+      console.error("메트릭스 실패", error);
+    }
+  } else {
+    console.log("No element was added to Q1");
+  }
+},
+
+    async updateEventsTo2(event) {
+  if (!this.authToken) {
+    console.error("Authentication token is missing");
+    return;
+  }
+  // 요소가 추가된 경우에만 처리
+  if (event.added) {
+    const eventElement = event.added.element;
+    if (!eventElement) {
+      console.error("Dragged element is missing");
+      return;
+    }
+    const eventId = eventElement.id;
+    console.log("이벤트의 아이디 ", eventId);
+
+    const url = `${process.env.VUE_APP_API_BASE_URL}/api/events/matrixUpdate/${eventId}/Q2`;
+    const headers = {
+      Authorization: `Bearer ${this.authToken}`,
+      "Content-Type": "application/json",
+    };
+
+    try {
+      const response = await axios.patch(url, {}, { headers });
+      if (response.data.success && response.data.data) {
+        console.log("수정 요청 성공함");
+      } else {
+        console.error("수정 요청 실패함");
+      }
+    } catch (error) {
+      console.error("메트릭스 실패", error);
+    }
+  } else {
+    console.log("No element was added to Q2");
+  }
+}
+,
+    async updateEventsTo3(event) {
+  if (!this.authToken) {
+    console.error("Authentication token is missing");
+    return;
+  }
+  // 요소가 추가된 경우에만 처리
+  if (event.added) {
+    const eventElement = event.added.element;
+    if (!eventElement) {
+      console.error("Dragged element is missing");
+      return;
+    }
+    const eventId = eventElement.id;
+    console.log("이벤트의 아이디 ", eventId);
+
+    const url = `${process.env.VUE_APP_API_BASE_URL}/api/events/matrixUpdate/${eventId}/Q3`;
+    const headers = {
+      Authorization: `Bearer ${this.authToken}`,
+      "Content-Type": "application/json",
+    };
+
+    try {
+      const response = await axios.patch(url, {}, { headers });
+      if (response.data.success && response.data.data) {
+        console.log("수정 요청 성공함");
+      } else {
+        console.error("수정 요청 실패함");
+      }
+    } catch (error) {
+      console.error("메트릭스 실패", error);
+    }
+  } else {
+    console.log("No element was added to Q3");
+  }
+}
+,
+
+    async updateEventsTo4(event) {
+  if (!this.authToken) {
+    console.error("Authentication token is missing");
+    return;
+  }
+  // 요소가 추가된 경우에만 처리
+  if (event.added) {
+    const eventElement = event.added.element;
+    if (!eventElement) {
+      console.error("Dragged element is missing");
+      return;
+    }
+    const eventId = eventElement.id;
+    console.log("이벤트의 아이디 ", eventId);
+
+    const url = `${process.env.VUE_APP_API_BASE_URL}/api/events/matrixUpdate/${eventId}/Q4`;
+    const headers = {
+      Authorization: `Bearer ${this.authToken}`,
+      "Content-Type": "application/json",
+    };
+
+    try {
+      const response = await axios.patch(url, {}, { headers });
+      if (response.data.success && response.data.data) {
+        console.log("수정 요청 성공함");
+      } else {
+        console.error("수정 요청 실패함");
+      }
+    } catch (error) {
+      console.error("메트릭스 실패", error);
+    }
+  } else {
+    console.log("No element was added to Q4");
+  }
+}
+,
+
     getAuthToken() {
       const token = localStorage.getItem("accessToken");
       if (!token) {
-        alert("로그인 후 이용해 주세요");
-        this.$router.push("/login"); // Vue Router를 사용해 로그인 페이지로 리다이렉트
+        console.error("No authentication token found.");
         return "";
       }
       return token;
@@ -182,7 +295,10 @@ export default {
         console.error("Authentication token is missing");
         return;
       }
-      const headers = { Authorization: `Bearer ${this.authToken}` }; // 헤더 설정 방식을 통일
+      const headers = {
+        Authorization: `Bearer ${this.authToken}`,
+        "Content-Type": "text/event-stream",
+      }; // 헤더 설정 방식을 통일
       const eventSource = new EventSource(`${process.env.VUE_APP_API_BASE_URL}/connect`, {
         headers,
       });
