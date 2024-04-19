@@ -47,13 +47,13 @@
                 </v-checkbox>
               </v-col>
               <v-col cols="9" sm="9">
-                <v-text-field
+                <v-text-field variant="underlined"
                   label="내용"
                   v-model="todo.text">
                 </v-text-field>
               </v-col>
               <v-col cols="12" sm="1">
-                <v-btn flat large @click="removeTodo(index)">삭제</v-btn>
+                <v-btn flat @click="removeTodo(index)">삭제</v-btn>
               </v-col>
             </v-row>
             <v-btn flat @click="addTodo">할 일 추가</v-btn>
@@ -207,7 +207,6 @@ export default {
       this.todos.splice(index, 1);
     },
     async createEvent() {
-
       // 알림 설정 관련
       const alarmYn = this.alertQuantity ? 'Y' : 'N';
       let alarmType;
