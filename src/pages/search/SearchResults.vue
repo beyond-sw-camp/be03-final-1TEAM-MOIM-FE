@@ -43,6 +43,7 @@
 import {useSearchStore} from "@/stores/searchStore";
 import {computed} from "vue";
 import EventDetail from "@/pages/search/EventDetail.vue";
+import {getDay, formatDate, formatDateAndTime} from "@/utils/date-utils";
 
 export default {
   components: {
@@ -50,46 +51,24 @@ export default {
   },
   methods: {
     onResultClick(result) {
-      this.$refs.dialog.openDialog(result.title, result.memo);
+      this.$refs.dialog.openDialog(
+          result.id,
+          result.nickname,
+          result.title,
+          result.memo,
+          result.startDate,
+          result.endDate,
+          result.place,
+          result.matrix,
+          result.fileUrl,
+          result.deleteYn,
+          result.alarmYn,
+      );
     }
   },
   setup() {
     const searchStore = useSearchStore();
     const results = computed(() => searchStore.results);
-
-    // 날짜 문자열을 받아서 "일"을 반환한다.
-    const getDay = (dateString) => {
-      const date = new Date(dateString);
-      return date.getDate();
-    }
-
-    // 날짜 문자열을 받아서 "YYYY년 m월, 요일" 형태로 반환한다.
-    const formatDate = (dateString) => {
-      const date = new Date(dateString);
-      const year = date.getFullYear();
-      const month = date.getMonth() + 1; // getMonth()는 0에서 11까지의 값을 반환하기 때문에 1을 더한다.
-      const dayNames = ["일", "월", "화", "수", "목", "금", "토"];
-      const day = dayNames[date.getDay()];
-      return `${year}년 ${month}월, ${day}`;
-    }
-
-    // 날짜 문자열을 "연 월 일 오전|오후 시 분" 형태로 반환
-    const formatDateAndTime = (dateString) => {
-      const date = new Date(dateString);
-      const year = date.getFullYear();
-      const month = date.getMonth() + 1; // getMonth()는 0에서 11까지의 값을 반환하기 때문에 1을 더한다.
-      const day = date.getDate();
-      let hours = date.getHours();
-      const minutes = date.getMinutes();
-
-      const ampm = hours >= 12 ? '오후' : '오전';
-
-      // 12시간제로 변환
-      hours = hours % 12;
-      hours = hours ? hours : 12; // hours가 0일 경우 12로 변경
-
-      return `${year}년 ${month}월 ${day}일 ${ampm} ${hours}:${minutes < 10 ? '0' + minutes : minutes}`;
-    }
 
     return {
       results: results,
@@ -125,7 +104,7 @@ export default {
 .result-card {
   background-color: #FEFCF6;
 }
-`
+
 .result-card-time {
   background-color: #FEFCF6;
 }

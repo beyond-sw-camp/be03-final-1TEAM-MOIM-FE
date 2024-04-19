@@ -3,11 +3,11 @@
       color="teal-darken-4"
       image="https://picsum.photos/seed/picsum/1920/1080"
   >
-    <template v-slot:image>
-      <v-img
-          gradient="to top right, rgba(255, 209, 220, 0.8), rgba(255,209,220,0.8)"
-      ></v-img>
-    </template>
+<!--    <template v-slot:image>-->
+<!--      <v-img-->
+<!--          gradient="to top right, rgba(255, 209, 220, 0.8), rgba(255,209,220,0.8)"-->
+<!--      ></v-img>-->
+<!--    </template>-->
 
     <template v-slot:prepend>
       <v-app-bar-nav-icon></v-app-bar-nav-icon>
