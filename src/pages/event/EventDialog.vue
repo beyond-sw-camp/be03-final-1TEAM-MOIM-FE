@@ -73,6 +73,18 @@
                 label="시간 단위" >
             </v-select>
           </v-col>
+          <v-col cols="12" md="2"><h4>반복</h4></v-col>
+          <v-col cols="12" md="5">
+            <v-select
+                v-model="repeatType"
+                :items="repeatTypes"
+                label="반복 단위" >
+            </v-select>
+          </v-col>
+          <v-col cols="12" md="2"><h4>반복종료</h4></v-col>
+          <v-col cols="12" md="3">
+            <input type="date" v-model="repeatEndDate">
+          </v-col>
           <v-col cols="12" md="12">
             <v-text-field
                 label="메모를 입력하세요."
@@ -135,8 +147,11 @@ export default {
       startDateTime: null,
       endDateTime: null,
       alertQuantity: null,
-      timeType: '분',
+      timeType: '',
       timeTypes: ['분', '시간', '일'],
+      repeatEndDate: null,
+      repeatType: '',
+      repeatTypes: ['매년', '매월', '매주', '매일'],
       files: [],
     } 
   },
@@ -183,6 +198,7 @@ export default {
       }
       const eventBlob = new Blob([JSON.stringify(eventRequest)], { type: 'application/json' });
 
+      // alarmRequests 조립
       const alarmList = [];
       if (this.alertQuantity) {
         alarmList.push({
@@ -190,20 +206,30 @@ export default {
           alarmType: alarmType,
         });
       }
-
       const alarmBlob = new Blob([JSON.stringify(alarmList)], { type: 'application/json' });
 
+      // repeatRequest 조립
+      let repeatType;
+      if (this.repeatType === '매년') repeatType = 'Y';
+      if (this.repeatType === '매월') repeatType = 'M';
+      if (this.repeatType === '매주') repeatType = 'W';
+      if (this.repeatType === '매일') repeatType = 'D';
+      let repeatRequest = {
+        repeatType: repeatType,
+        repeatEndDate: this.repeatEndDate
+      }
+      const repeatBlob = new Blob([JSON.stringify(repeatRequest)], { type: 'application/json' });
+
+
       const formData = new FormData();
-      formData.append('alarmRequests', alarmBlob);  
       formData.append('eventRequest', eventBlob);
+      formData.append('alarmRequests', alarmBlob); 
+      formData.append('repeatRequest', repeatBlob); 
 
       if (this.files && this.files.length > 0) {
         // 우선 단일 파일만 전송할 수 있도록 설정
         formData.append('file', this.files[0]);
       }
-
-      
-      
 
       const TOKEN = localStorage.getItem('accessToken');
       const url = `${process.env.VUE_APP_API_BASE_URL}/api/events`;
