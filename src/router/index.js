@@ -8,7 +8,7 @@ import EventDialog from "@/pages/event/EventDialog.vue";
 import EisenhowerMatrix from "@/views/EisenhowerMatrix.vue";
 import DialogTestView from "@/views/DialogTestView.vue";
 import fullCalendarComponent from "@/views/FullCalendarComponent.vue";
-import SearchResults from "@/views/SearchResults.vue";
+import SearchResults from "@/pages/search/SearchResults.vue";
 
 const routes = [
     {

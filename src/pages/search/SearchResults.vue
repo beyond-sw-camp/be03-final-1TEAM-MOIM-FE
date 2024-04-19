@@ -1,25 +1,24 @@
 <template>
-  <v-container>
-    <v-row justify="center" v-if="results.length > 0">
+  <v-container class="search-results">
+    <v-row v-if="results.length > 0">
+      <EventDetail ref="dialog"></EventDetail>
       <v-col cols="12" v-for="result in results" :key="result.id">
         <v-card
+            class="mx-auto result-card"
             :title="result.title"
             :subtitle="formatDate(result.startDate)"
-            class="mx-auto"
             max-width="800"
+            @click="onResultClick(result)"
             link>
           <template v-slot:prepend>
             <v-btn
-                :disabled="!number"
                 class="circle-button"
-                color="primary"
-                @click="onClickButton"
             >
               {{ getDay(result.startDate) }}
             </v-btn>
           </template>
           <template v-slot:append>
-            <v-list lines="one">
+            <v-list lines="one" class="result-card-time">
               <v-list-item
                   :title="'시작'"
                   :subtitle="formatDateAndTime(result.startDate)"
@@ -30,6 +29,7 @@
               />
             </v-list>
           </template>
+          <v-text-field>{{result}}</v-text-field>
         </v-card>
       </v-col>
     </v-row>
@@ -42,8 +42,17 @@
 <script>
 import {useSearchStore} from "@/stores/searchStore";
 import {computed} from "vue";
+import EventDetail from "@/pages/search/EventDetail.vue";
 
 export default {
+  components: {
+    EventDetail,
+  },
+  methods: {
+    onResultClick(result) {
+      this.$refs.dialog.openDialog(result.title, result.memo);
+    }
+  },
   setup() {
     const searchStore = useSearchStore();
     const results = computed(() => searchStore.results);
@@ -93,6 +102,10 @@ export default {
 </script>
 
 <style>
+.search-results {
+  margin-top: -15%;
+}
+
 .circle-button {
   border-radius: 50%; /* 원형 버튼을 만들기 위한 CSS */
   min-width: 50px; /* 버튼의 최소 너비 */
@@ -102,5 +115,18 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+  background-color: #E0BB76;
+  color: #162A2C;
+  margin-right: 20px;
+  margin-left: 10px;
+}
+
+.result-card {
+  background-color: #FEFCF6;
+}
+`
+.result-card-time {
+  background-color: #FEFCF6;
 }
 </style>
