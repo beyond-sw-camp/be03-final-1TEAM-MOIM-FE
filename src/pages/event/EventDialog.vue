@@ -168,59 +168,47 @@ export default {
       const alarmYn = this.alertQuantity ? 'Y' : 'N';
       let alarmType;
       if (this.timeType === '분') alarmType = 'M';
-      else if (this.timeType === '시간') alarmType = 'H';
-      else alarmType = 'D';
+      if (this.timeType === '시간') alarmType = 'H';
+      if (this.timeType === '일') alarmType = 'D';
 
-      const alarmSetting = [];
+      // eventRequest 조립
+      let eventRequest = {
+        title: this.title,
+        memo: this.memo,
+        startDate: this.startDateTime,
+        endDate: this.endDateTime,
+        place: this.place,
+        matrix: this.radios,
+        alarmYn: alarmYn
+      }
+      const eventBlob = new Blob([JSON.stringify(eventRequest)], { type: 'application/json' });
+
+      const alarmList = [];
       if (this.alertQuantity) {
-        alarmSetting.push({
-          setTime: String(this.alertQuantity),
-          alarmType: String(alarmType),
+        alarmList.push({
+          setTime: this.alertQuantity,
+          alarmType: alarmType,
         });
       }
 
-      // let alarmJsonInfo = JSON.stringfy(alarmSetting);
-      // const alarmRequest = new Blob([alarmJsonInfo], { type: 'application/json' });
+      const alarmBlob = new Blob([JSON.stringify(alarmList)], { type: 'application/json' });
+
+      const formData = new FormData();
+      formData.append('alarmRequests', alarmBlob);  
+      formData.append('eventRequest', eventBlob);
+
+      if (this.files && this.files.length > 0) {
+        // 우선 단일 파일만 전송할 수 있도록 설정
+        formData.append('file', this.files[0]);
+      }
 
       
-      // console.log("alarmSetting을 알아보자: " + JSON.stringify(alarmSetting));
-      // console.log("alarmSetting을 알아보자: " + typeof alarmSetting);
-      // console.log("alarmSetting을 알아보자: " + typeof alarmSetting);
+      
+
+      const TOKEN = localStorage.getItem('accessToken');
+      const url = `${process.env.VUE_APP_API_BASE_URL}/api/events`;
+
       try {
-        // eventRequest 조립
-        let eventRequest = {
-          title: this.title,
-          memo: this.memo,
-          startDate: this.startDateTime,
-          endDate: this.endDateTime,
-          place: this.place,
-          matrix: this.radios,
-          alarmYn: alarmYn
-        }
-        const blob = new Blob([JSON.stringify(eventRequest)], { type: 'application/json' });
-
-        const formData = new FormData();
-        // formData.append('title', this.title);
-        // formData.append('memo', this.memo);
-        // formData.append('startDate', this.startDateTime);
-        // formData.append('endDate', this.endDateTime);
-        // formData.append('place', this.place);
-        // formData.append('matrix', this.radios);
-        // formData.append('alarmYn', alarmYn);
-        // formData.append('alarmRequest', JSON.stringify(alarmSetting));
-
-        if (this.files && this.files.length > 0) {
-          // 우선 단일 파일만 전송할 수 있도록 설정
-          formData.append('file', this.files[0]);
-        }
-
-        formData.append('eventRequest', blob);
-        if(formData == null) {
-          console.log("없음")
-        }
-
-        const TOKEN = localStorage.getItem('accessToken');
-        const url = `${process.env.VUE_APP_API_BASE_URL}/api/events`;
         await axios.post(url, formData, {
           headers: {
             "Authorization": `Bearer ${TOKEN}`,
