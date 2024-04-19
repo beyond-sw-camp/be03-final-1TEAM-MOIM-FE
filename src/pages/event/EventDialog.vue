@@ -7,7 +7,8 @@
       </v-card-title>
       <v-card-text>
         <v-row dense>
-          <v-col cols="12" sm="12">
+          <v-col cols="12" sm="2"><h4>제목</h4></v-col>
+          <v-col cols="12" sm="10">
             <v-text-field label="제목을 입력하세요"
                           :rules="[value => !!value || '']"
                           required
@@ -22,16 +23,44 @@
           <v-col cols="12" md="10">
             <input type="datetime-local" v-model="endDateTime">
           </v-col>
-          <v-col cols="12" sm="12">
+          <v-col cols="12" sm="2"><h4>장소</h4></v-col>
+          <v-col cols="12" sm="10">
             <v-text-field label="장소를 입력하세요"
                           :rules="[value => !!value || '']"
                           required
                           v-model="place">
             </v-text-field>
           </v-col>
-          <v-col cols="12" sm="12"><h4>아이젠하워 매트릭스 중요도</h4></v-col>
-          <v-col cols="12" sm="12">
-            <v-container fluid>
+          <v-col cols="12" sm="2"><h4>메모</h4></v-col>
+          <v-col cols="12" md="10">
+            <v-textarea
+                auto-grow label="메모를 입력하세요."
+                v-model="memo">
+            </v-textarea>
+          </v-col>
+          <v-col cols="12" md="2"><h4>할 일</h4></v-col>
+          <v-col cols="12" sm="10">
+            <v-row dense v-for="(todo, index) in todos" :key="index">
+              <v-col cols="2" sm="1">
+                <v-checkbox
+                  v-model="todo.done">
+                </v-checkbox>
+              </v-col>
+              <v-col cols="9" sm="9">
+                <v-text-field
+                  label="내용"
+                  v-model="todo.text">
+                </v-text-field>
+              </v-col>
+              <v-col cols="12" sm="1">
+                <v-btn flat large @click="removeTodo(index)">삭제</v-btn>
+              </v-col>
+            </v-row>
+            <v-btn flat @click="addTodo">할 일 추가</v-btn>
+          </v-col>
+          <v-col cols="12" md="2"><h4>중요도</h4></v-col>
+          <v-col cols="12" sm="10">
+            <v-container>
               <v-radio-group v-model="radios"
                              :rules="[value => !!value || '4가지 선택지 중 하나를 선택해주세요']"
                              required>
@@ -86,12 +115,6 @@
             <input type="date" v-model="repeatEndDate">
           </v-col>
           <v-col cols="12" md="12">
-            <v-text-field
-                label="메모를 입력하세요."
-                v-model="memo">
-            </v-text-field>
-          </v-col>
-          <v-col cols="12" md="12">
             <v-file-input
                 v-model="files"
                 label="File input"
@@ -136,7 +159,6 @@ export default {
   //     closeDialog
   //   };
   // },
-
   data () {
     return {
       isDialogOpen: false,
@@ -150,8 +172,9 @@ export default {
       timeType: '',
       timeTypes: ['분', '시간', '일'],
       repeatEndDate: null,
-      repeatType: '',
+      repeatType: null,
       repeatTypes: ['매년', '매월', '매주', '매일'],
+      todos: [{ text: '', done: false }],
       files: [],
     } 
   },
@@ -176,6 +199,12 @@ export default {
     },
     closeDialog() {
       this.isDialogOpen = false;
+    },
+    addTodo() {
+      this.todos.push({ text: '', done: false });
+    },
+    removeTodo(index) {
+      this.todos.splice(index, 1);
     },
     async createEvent() {
 
@@ -207,24 +236,44 @@ export default {
         });
       }
       const alarmBlob = new Blob([JSON.stringify(alarmList)], { type: 'application/json' });
-
-      // repeatRequest 조립
-      let repeatType;
-      if (this.repeatType === '매년') repeatType = 'Y';
-      if (this.repeatType === '매월') repeatType = 'M';
-      if (this.repeatType === '매주') repeatType = 'W';
-      if (this.repeatType === '매일') repeatType = 'D';
-      let repeatRequest = {
-        repeatType: repeatType,
-        repeatEndDate: this.repeatEndDate
-      }
-      const repeatBlob = new Blob([JSON.stringify(repeatRequest)], { type: 'application/json' });
-
+      
 
       const formData = new FormData();
       formData.append('eventRequest', eventBlob);
       formData.append('alarmRequests', alarmBlob); 
-      formData.append('repeatRequest', repeatBlob); 
+
+      // repeatRequest 조립
+      if(this.repeatType != null){
+        let repeatType;
+        if (this.repeatType === '매년') repeatType = 'Y';
+        if (this.repeatType === '매월') repeatType = 'M';
+        if (this.repeatType === '매주') repeatType = 'W';
+        if (this.repeatType === '매일') repeatType = 'D';
+        let repeatRequest = {
+          repeatType: repeatType,
+          repeatEndDate: this.repeatEndDate
+        }
+        const repeatBlob = new Blob([JSON.stringify(repeatRequest)], { type: 'application/json' });
+        formData.append('repeatRequest', repeatBlob); 
+      }
+
+      // toDoListRequests 조립
+      const toDoList = [];
+      if (this.todos != null) {
+        this.todos.forEach(function(todo){
+          toDoList.push({
+            contents: todo.text,
+            isChecked: todo.done,
+          });
+        })
+        const toDoBlob = new Blob([JSON.stringify(toDoList)], { type: 'application/json' });
+        formData.append('toDoListRequests', toDoBlob); 
+      }
+    
+      
+      
+
+     
 
       if (this.files && this.files.length > 0) {
         // 우선 단일 파일만 전송할 수 있도록 설정
