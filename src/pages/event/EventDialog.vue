@@ -111,7 +111,6 @@
 <script>
 import axios from 'axios';
 // import {useMainStore} from '@/stores'
-import {jwtDecode} from "jwt-decode";
 
 export default {
   // setup() {
@@ -144,6 +143,9 @@ export default {
 
   methods: {
     selectOpenDialog(selectInfo) {
+      if(selectInfo.view)
+      console.log("start", selectInfo.start);
+      console.log("view" ,selectInfo.view);
       // string 타입의 날짜를 Date 객체로 변환
       let dateObject = new Date(selectInfo.endStr);
       // 1일을 빼기 위해 24시간 * 60분 * 60초 * 1000밀리초를 빼줌
@@ -151,7 +153,7 @@ export default {
       // 변경된 날짜를 string으로 변환
       let newDateString = dateObject.toISOString().split('T')[0];
       this.startDateTime = selectInfo.startStr + "T00:00:00";
-      this.endDateTime = newDateString + "T00:00:00";
+      this.endDateTime = newDateString + "T23:59:00";
       this.isDialogOpen = true;
     },
     openDialog() {
@@ -161,9 +163,6 @@ export default {
       this.isDialogOpen = false;
     },
     async createEvent() {
-      const TOKEN = localStorage.getItem('accessToken');
-      const email = jwtDecode(TOKEN).email;
-      const url = `${process.env.VUE_APP_API_BASE_URL}/api/events`;
 
       // 알림 설정 관련
       const alarmYn = this.alertQuantity ? 'Y' : 'N';
@@ -183,40 +182,60 @@ export default {
       // let alarmJsonInfo = JSON.stringfy(alarmSetting);
       // const alarmRequest = new Blob([alarmJsonInfo], { type: 'application/json' });
 
-      console.log("토큰: " + TOKEN);
-      console.log("이메일: " + email);
-      console.log("url: " + url);
+      
       // console.log("alarmSetting을 알아보자: " + JSON.stringify(alarmSetting));
       // console.log("alarmSetting을 알아보자: " + typeof alarmSetting);
       // console.log("alarmSetting을 알아보자: " + typeof alarmSetting);
-
-
-      const formData = new FormData();
-      formData.append('nickname', email);
-      formData.append('title', this.title);
-      formData.append('memo', this.memo);
-      formData.append('startDate', this.startDateTime);
-      formData.append('endDate', this.endDateTime);
-      formData.append('place', this.place);
-      formData.append('matrix', this.radios);
-      formData.append('alarmYn', alarmYn);
-      // formData.append('alarmRequest', JSON.stringify(alarmSetting));
-
-      if (this.files && this.files.length > 0) {
-        // 우선 단일 파일만 전송할 수 있도록 설정
-        formData.append('file', this.files[0]);
-      }
-
-      await axios.post(url, formData, {
-        headers: {
-          "Authorization": `Bearer ${TOKEN}`,
-          'Content-Type': 'multipart/form-data'
+      try {
+        // eventRequest 조립
+        let eventRequest = {
+          title: this.title,
+          memo: this.memo,
+          startDate: this.startDateTime,
+          endDate: this.endDateTime,
+          place: this.place,
+          matrix: this.radios,
+          alarmYn: alarmYn
         }
-      });
+        const blob = new Blob([JSON.stringify(eventRequest)], { type: 'application/json' });
 
-      this.closeDialog();
-      window.alert(this.title + " 일정이 생성되었습니다.")
-      window.location.reload();
+        const formData = new FormData();
+        // formData.append('title', this.title);
+        // formData.append('memo', this.memo);
+        // formData.append('startDate', this.startDateTime);
+        // formData.append('endDate', this.endDateTime);
+        // formData.append('place', this.place);
+        // formData.append('matrix', this.radios);
+        // formData.append('alarmYn', alarmYn);
+        // formData.append('alarmRequest', JSON.stringify(alarmSetting));
+
+        if (this.files && this.files.length > 0) {
+          // 우선 단일 파일만 전송할 수 있도록 설정
+          formData.append('file', this.files[0]);
+        }
+
+        formData.append('eventRequest', blob);
+        if(formData == null) {
+          console.log("없음")
+        }
+
+        const TOKEN = localStorage.getItem('accessToken');
+        const url = `${process.env.VUE_APP_API_BASE_URL}/api/events`;
+        await axios.post(url, formData, {
+          headers: {
+            "Authorization": `Bearer ${TOKEN}`,
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        console.log("등록완료")
+      
+        this.closeDialog();
+        window.alert(this.title + " 일정이 생성되었습니다.")
+        window.location.reload();
+
+      } catch (error) {
+        console.log(error)
+      }
     },
 
     // formatDate(dateTimeStr) {
