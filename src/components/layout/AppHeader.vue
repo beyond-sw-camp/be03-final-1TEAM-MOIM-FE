@@ -3,12 +3,6 @@
       color="teal-darken-4"
       image="https://picsum.photos/seed/picsum/1920/1080"
   >
-<!--    <template v-slot:image>-->
-<!--      <v-img-->
-<!--          gradient="to top right, rgba(255, 209, 220, 0.8), rgba(255,209,220,0.8)"-->
-<!--      ></v-img>-->
-<!--    </template>-->
-
     <template v-slot:prepend>
       <v-app-bar-nav-icon></v-app-bar-nav-icon>
     </template>
@@ -100,14 +94,19 @@ export default {
 </script>
 
 <style lang="sass">
-  .v-input.expanding-search
-    transition: 0.3s
+.v-app-bar
+  color: #162A2C
+  .v-icon, .v-text-field, .v-app-bar-title
+    color: #162A2C !important
+.v-input.expanding-search
+  transition: 0.3s
+  max-width: 20%
+  .v-input__slot
+    cursor: pointer !important
+    &:before, &:after
+      border-color: transparent !important
+  &.closed
+    max-width: 45px
     .v-input__slot
-      cursor: pointer !important
-      &:before, &:after
-        border-color: transparent !important
-    &.closed
-      max-width: 45px
-      .v-input__slot
-        background: transparent !important
+      background: transparent !important
 </style>
