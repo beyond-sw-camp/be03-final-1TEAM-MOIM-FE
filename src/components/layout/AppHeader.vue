@@ -82,12 +82,12 @@ export default {
         } else {
           searchStore.setResults([]);
         }
-        // 검색 이후 검색 결과 페이지로 이동함
-        this.$router.push({name: "Search"});
       } catch (error) {
         console.error("Error occurred when searching events: ", error);
         searchStore.setResults([]);
       }
+      // 검색 이후 항상 검색 결과 페이지로 이동함
+      this.$router.push({name: "Search"});
     },
   },
 };

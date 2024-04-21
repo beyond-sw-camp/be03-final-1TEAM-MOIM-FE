@@ -27,7 +27,7 @@
               />
             </v-list>
           </template>
-<!--          <v-text-field>{{result}}</v-text-field>-->
+          <v-text-field>{{result}}</v-text-field>
         </v-card>
       </v-col>
     </v-row>

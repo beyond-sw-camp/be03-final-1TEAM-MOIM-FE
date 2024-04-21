@@ -15,41 +15,41 @@
           <v-col cols="12" md="10">
             <input type="datetime-local" :value="endDate" readonly>
           </v-col>
-          <v-col cols="12" md="2">
+          <!-- 장소 조회 -->
+          <v-col cols="12" md="2" v-if="place">
             <v-icon class="mr-2">mdi-map-marker</v-icon>
           </v-col>
-          <v-col cols="12" md="10">
+          <v-col cols="12" md="10" v-if="place">
             <input type="text" :value="place" readonly>
           </v-col>
+          <!-- 아이젠하워 매트릭스 조회 -->
           <v-col cols="12" md="2">
             <v-icon class="mr-2">mdi-alert-circle-outline</v-icon>
           </v-col>
           <v-col cols="12" md="10">
             <input type="text" :value="matrix" readonly>
           </v-col>
-          <v-col cols="12" md="2">
+          <!-- 알람 조회 -->
+          <v-col cols="12" md="2" v-if="displayAlarmInfo">
             <v-icon class="mr-2">mdi-bell-outline</v-icon>
           </v-col>
-          <v-col cols="12" md="10">
+          <v-col cols="12" md="10" v-if="displayAlarmInfo">
             <p v-html="displayAlarmInfo"></p>
           </v-col>
-          <v-col cols="12" md="2">
+          <!-- 메모 조회 -->
+          <v-col cols="12" md="2" v-if="memo">
             <v-icon class="mr-2">mdi-format-align-left</v-icon>
           </v-col>
-          <v-col cols="12" md="10">
+          <v-col cols="12" md="10" v-if="memo">
             <v-textarea :value="memo" variant="solo-filled" readonly auto-grow></v-textarea>
           </v-col>
-<!--          <v-col cols="12" md="12">-->
-<!--            &lt;!&ndash; 파일 목록은 보여주되, 다운로드 링크나 뷰어를 제공할 수 있습니다. &ndash;&gt;-->
-<!--            &lt;!&ndash; <v-subheader>첨부 파일</v-subheader> &ndash;&gt;-->
-<!--            <v-list dense>-->
-<!--              <v-list-item v-for="file in files" :key="file.name">-->
-<!--                &lt;!&ndash; <v-list-item-content>-->
-<!--                  <v-list-item-title>{{ file.name }}</v-list-item-title>-->
-<!--                </v-list-item-content> &ndash;&gt;-->
-<!--              </v-list-item>-->
-<!--            </v-list>-->
-<!--          </v-col>-->
+          <!-- 파일 다운로드 -->
+          <v-col cols="12" md="2" v-if="fileUrl">
+            <v-icon class="mr-2">mdi-file-multiple-outline</v-icon>
+          </v-col>
+          <v-col cols="12" md="10" v-if="fileUrl">
+            <v-btn :href="fileUrl" download>파일 다운로드</v-btn>
+          </v-col>
         </v-row>
       </v-card-text>
       <v-card-actions>
@@ -69,9 +69,14 @@ export default {
     return {
       dialog: false,
       title: '',
+      startDate: '',
+      endDate: '',
+      place: '',
+      matrix: '',
       memo: '',
       alarmInfo: '',
       displayAlarmInfo: '',
+      fileUrl: '',
     };
   },
   methods: {
