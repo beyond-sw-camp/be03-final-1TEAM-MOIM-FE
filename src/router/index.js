@@ -9,6 +9,7 @@ import EisenhowerMatrix from "@/views/EisenhowerMatrix.vue";
 import DialogTestView from "@/views/DialogTestView.vue";
 import fullCalendarComponent from "@/views/FullCalendarComponent.vue";
 import SearchResults from "@/pages/search/SearchResults.vue";
+import EventDetailDialog from "@/pages/event/EventDetailDialog.vue";
 
 const routes = [
     {
@@ -76,6 +77,11 @@ const routes = [
                 path: "fullCalendarComponent",
                 name: "fullCalendarComponent",
                 component: fullCalendarComponent
+            },
+            {
+                path: "eventDetail",
+                name: "eventDetail",
+                component: EventDetailDialog
             },
         ]
     },
