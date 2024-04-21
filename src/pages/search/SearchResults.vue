@@ -11,9 +11,7 @@
             @click="onResultClick(result)"
             link>
           <template v-slot:prepend>
-            <v-btn
-                class="circle-button"
-            >
+            <v-btn class="circle-button">
               {{ getDay(result.startDate) }}
             </v-btn>
           </template>
@@ -29,7 +27,7 @@
               />
             </v-list>
           </template>
-          <v-text-field>{{result}}</v-text-field>
+<!--          <v-text-field>{{result}}</v-text-field>-->
         </v-card>
       </v-col>
     </v-row>
