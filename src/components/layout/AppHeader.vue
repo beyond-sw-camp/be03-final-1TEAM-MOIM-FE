@@ -72,6 +72,7 @@
 <script>
 import axios from "axios";
 import { useSearchStore } from '@/stores/searchStore'
+import { EventSourcePolyfill } from 'event-source-polyfill';
 
 export default {
   name: "AppHeader",
@@ -84,7 +85,20 @@ export default {
       items: [],
     };
   },
-
+  created() {
+    if(localStorage.getItem('accessToken') != null){
+      const token = localStorage.getItem('accessToken');
+      var sse = new EventSourcePolyfill('http://localhost:8080/connect', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      sse.addEventListener('connect', (e) => {
+        const { data: receivedConnectData } = e;
+        console.log('connect event data: ',receivedConnectData); 
+      });
+    }
+  },
   methods: {
     getAuthToken() {
       const token = localStorage.getItem("accessToken");
@@ -150,10 +164,10 @@ export default {
           });
         });
         this.items = notifications;
-        if(this.items.length < 1) {
-          this.items = [{title: '알림이 없습니다.'}]
-        }
       } catch (error) {
+        if(error.response.data.error.type == 'NotificationNotFoundException') {
+          this.items = [{title: '알림이 없습니다.'}];
+        }
         console.log(error);
       }
     },
