@@ -10,6 +10,43 @@
     <v-app-bar-title>MOIM</v-app-bar-title>
 
     <v-spacer></v-spacer>
+    
+
+    <v-menu>
+      <template v-slot:activator="{ props }">
+        <v-btn icon="mdi-bell-outline" v-bind="props" @click="getNotification"></v-btn>
+      </template>
+
+      <v-list style="max-height: 300px; overflow-y: auto;">
+        <v-list-item
+          v-for="(item, i) in items"
+          :key="i"
+          :value="i"
+        >
+          <v-list-item-content>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+            <v-list-item-subtitle>{{ item.subtitle }}</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+
+    <!-- <v-menu offset-y v-model="menu">
+      <template #activator="{ on, attrs }">
+        <v-btn icon v-bind="attrs" v-on="on">
+          <v-icon>mdi-bell-outline</v-icon>
+        </v-btn>
+      </template>
+  
+      <v-list>
+        <v-list-item v-for="(item, index) in notifications" :key="index">
+          <v-list-item-content>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+            <v-list-item-subtitle>{{ item.subtitle }}</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-menu> -->
 
     <v-text-field
         @focus="searchClosed=false"
@@ -44,6 +81,7 @@ export default {
       searchClosed: true,
       searchQuery: null,
       authToken: this.getAuthToken(),
+      items: [],
     };
   },
 
@@ -89,6 +127,57 @@ export default {
       // 검색 이후 항상 검색 결과 페이지로 이동함
       this.$router.push({name: "Search"});
     },
+    async getNotification() {
+      try {
+        const token = localStorage.getItem("accessToken");
+        const headers = { Authorization: `Bearer ${token}` };
+        console.log(token)
+        if (token == null) {
+          alert("로그인이 필요합니다.");
+          this.$router.push({ name: "Login" });
+          return;
+        }
+        const response = await axios.get(`${process.env.VUE_APP_API_BASE_URL}/api/notification`, { headers });
+        const getNotifications = response.data.data;
+        console.log(getNotifications);
+        const notifications = [];
+        let timeAgo;
+        getNotifications.forEach(noti => {
+          timeAgo = this.calculateTimeAgo(noti.sendTime),
+          notifications.push({
+              title: noti.message,
+              subtitle: timeAgo
+          });
+        });
+        this.items = notifications;
+        if(this.items.length < 1) {
+          this.items = [{title: '알림이 없습니다.'}]
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    calculateTimeAgo(timestamp) {
+      const currentTime = new Date(); // 현재 시간
+      const givenTime = new Date(timestamp); // 주어진 시간 데이터
+
+      const timeDiff = currentTime - givenTime; // 현재 시간과 주어진 시간의 차이 (밀리초 단위)
+
+       // 밀리초를 분으로 변환
+      const minutes = Math.floor((timeDiff / 1000) / 60);
+      // 분을 시간으로 변환
+      const hours = Math.floor(minutes / 60);
+      // 시간을 일로 변환
+      const days = Math.floor(hours / 24);
+
+      if (days > 0) {
+        return days + "일 전";
+      } else if (hours > 0) {
+        return hours + "시간 전";
+      } else {
+        return minutes + "분 전";
+      }
+    }
   },
 };
 </script>
