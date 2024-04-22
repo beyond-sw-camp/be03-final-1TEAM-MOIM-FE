@@ -154,7 +154,7 @@ export default {
       title: '',
       memo: '',
       place: '',
-      radios: null,
+      radios: 'Q1',
       startDateTime: null,
       endDateTime: null,
       alertQuantity: null,
@@ -163,7 +163,7 @@ export default {
       repeatEndDate: null,
       repeatType: null,
       repeatTypes: ['매년', '매월', '매주', '매일'],
-      todos: [{ text: '', done: false }],
+      todos: [],
       rules: {
         required: value => !!value || '내용을 입력해주세요.',
       },
@@ -199,6 +199,21 @@ export default {
       this.todos.splice(index, 1);
     },
     async createEvent() {
+      if (!this.title) {
+        alert('제목을 입력하세요.');
+        return;
+      }
+
+      if (!this.startDateTime){
+        alert("시작일을 입력하세요.");
+        return;
+      }
+
+      if (!this.endDateTime) {
+        alert('종료일을 입력하세요.');
+        return;
+      }
+
       // 알림 설정 관련
       const alarmYn = this.alertQuantity ? 'Y' : 'N';
       let alarmType;
@@ -251,19 +266,19 @@ export default {
       // toDoListRequests 조립
       const toDoList = [];
       if (this.todos.length > 0) {
-        this.todos.forEach(function(todo){
-          let isChecked; 
-          if(todo.done == false) {
-            isChecked = "N";
-          }else {
-            isChecked = "Y";
+        for (const todo of this.todos) {
+          let isChecked = todo.done ? "Y" : "N";
+
+          if (!todo.text) {
+            alert('내용을 입력하세요.');
+            return;
           }
+
           toDoList.push({
             contents: todo.text,
             isChecked: isChecked,
           });
-          console.log(isChecked);
-        })
+        }
         const toDoBlob = new Blob([JSON.stringify(toDoList)], { type: 'application/json' });
         formData.append('toDoListRequests', toDoBlob); 
       }
