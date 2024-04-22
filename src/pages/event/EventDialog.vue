@@ -49,7 +49,8 @@
               <v-col cols="9" sm="9">
                 <v-text-field variant="underlined"
                   label="내용"
-                  v-model="todo.text">
+                  v-model="todo.text"
+                  :rules="[rules.required]">
                 </v-text-field>
               </v-col>
               <v-col cols="12" sm="1">
@@ -175,6 +176,9 @@ export default {
       repeatType: null,
       repeatTypes: ['매년', '매월', '매주', '매일'],
       todos: [{ text: '', done: false }],
+      rules: {
+        required: value => !!value || '내용을 입력해주세요.',
+      },
       files: [],
     } 
   },
@@ -258,12 +262,19 @@ export default {
 
       // toDoListRequests 조립
       const toDoList = [];
-      if (this.todos != null) {
+      if (this.todos.length > 0) {
         this.todos.forEach(function(todo){
+          let isChecked; 
+          if(todo.done == false) {
+            isChecked = "N";
+          }else {
+            isChecked = "Y";
+          }
           toDoList.push({
             contents: todo.text,
-            isChecked: todo.done,
+            isChecked: isChecked,
           });
+          console.log(isChecked);
         })
         const toDoBlob = new Blob([JSON.stringify(toDoList)], { type: 'application/json' });
         formData.append('toDoListRequests', toDoBlob); 
