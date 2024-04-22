@@ -60,7 +60,8 @@
       <v-card-actions>
         <v-spacer/>
         <v-btn color="green darken-1" text @click="dialog = false">수정</v-btn>
-        <v-btn color="green darken-1" text @click="showDeleteDialog">삭제</v-btn>
+        <v-btn color="green darken-1" text @click="showDeleteDialog" v-if="repeatParent != null">삭제</v-btn>
+        <v-btn color="green darken-1" text @click="deleteSingleEvent" v-else>단일 일정 삭제</v-btn>
       </v-card-actions>
       <DeleteRepeatEvent
           ref="delRepeatDialog"
@@ -146,6 +147,28 @@ export default {
         console.log(error);
       }
     },
+
+    async deleteSingleEvent() {
+      try {
+        const token = localStorage.getItem("accessToken");
+        if (token == null) {
+          alert("로그인이 필요합니다.");
+          this.$router.push({ name: "Login" });
+          return;
+        }
+        const headers = { Authorization: `Bearer ${token}` };
+        const response = await axios.delete(`${process.env.VUE_APP_API_BASE_URL}/api/events/${this.id}`, { headers });
+        if(response.status === 200) {
+          alert('단일 일정 삭제 성공');
+          location.reload(); // or some other code you want to run after delete
+        } else {
+          alert('단일 일정 삭제 실패');
+        }
+      } catch(error) {
+        console.log(error);
+        alert('단일 일정 삭제 실패');
+      }
+    }
   }
 };
 </script>
