@@ -14,7 +14,11 @@
 
     <v-menu>
       <template v-slot:activator="{ props }">
-        <v-btn icon="mdi-bell-outline" v-bind="props" @click="getNotification"></v-btn>
+        <v-btn icon v-bind="props" @click="getNotification">
+          <v-badge color="red" :content="newNotification">
+            <v-icon>mdi-bell-outline</v-icon>
+          </v-badge>
+        </v-btn>
       </template>
 
       <v-list style="max-height: 300px; overflow-y: auto;">
@@ -83,6 +87,7 @@ export default {
       searchQuery: null,
       authToken: this.getAuthToken(),
       items: [],
+      newNotification : 0,
     };
   },
   created() {
@@ -96,6 +101,17 @@ export default {
       sse.addEventListener('connect', (e) => {
         const { data: receivedConnectData } = e;
         console.log('connect event data: ',receivedConnectData); 
+      });
+      sse.addEventListener('sendEventAlarm', e => { 
+        const obj = JSON.parse(e.data);
+        this.newNotification = this.newNotification + 1;
+        // let timeAgo = this.calculateTimeAgo(obj.sendTime)
+        // this.items.push({
+        //   title: obj.message,
+        //   subtitle: timeAgo
+        // }) 
+        console.log(obj)
+        console.log(this.items[0].message); 
       });
     }
   },
@@ -179,17 +195,19 @@ export default {
 
        // 밀리초를 분으로 변환
       const minutes = Math.floor((timeDiff / 1000) / 60);
-      // 분을 시간으로 변환
-      const hours = Math.floor(minutes / 60);
-      // 시간을 일로 변환
-      const days = Math.floor(hours / 24);
 
-      if (days > 0) {
-        return days + "일 전";
-      } else if (hours > 0) {
-        return hours + "시간 전";
-      } else {
+      if (minutes < 1) {
+        return "방금";
+      } else if (minutes < 60) {
         return minutes + "분 전";
+      } else {
+        const hours = Math.floor(minutes / 60);
+        if (hours < 24) {
+          return hours + "시간 전";
+        } else {
+          const days = Math.floor(hours / 24);
+          return days + "일 전";
+        }
       }
     }
   },
