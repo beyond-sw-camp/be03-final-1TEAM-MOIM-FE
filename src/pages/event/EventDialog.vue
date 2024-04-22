@@ -173,17 +173,23 @@ export default {
 
   methods: {
     selectOpenDialog(selectInfo) {
-      if(selectInfo.view)
-      console.log("start", selectInfo.start);
       console.log("view" ,selectInfo.view);
-      // string 타입의 날짜를 Date 객체로 변환
-      let dateObject = new Date(selectInfo.endStr);
-      // 1일을 빼기 위해 24시간 * 60분 * 60초 * 1000밀리초를 빼줌
-      dateObject.setTime(dateObject.getTime() - (1 * 24 * 60 * 60 * 1000));
-      // 변경된 날짜를 string으로 변환
-      let newDateString = dateObject.toISOString().split('T')[0];
-      this.startDateTime = selectInfo.startStr + "T00:00:00";
-      this.endDateTime = newDateString + "T23:59:00";
+      console.log("start", selectInfo.start);
+      console.log("startStr", selectInfo.startStr);
+      console.log("startStr", selectInfo.endStr);
+      if(selectInfo.view.type == 'dayGridMonth') {
+        // string 타입의 날짜를 Date 객체로 변환
+        let dateObject = new Date(selectInfo.endStr);
+        // 1일을 빼기 위해 24시간 * 60분 * 60초 * 1000밀리초를 빼줌
+        dateObject.setTime(dateObject.getTime() - (1 * 24 * 60 * 60 * 1000));
+        // 변경된 날짜를 string으로 변환
+        let newDateString = dateObject.toISOString().split('T')[0];
+        this.startDateTime = selectInfo.startStr + "T00:00:00";
+        this.endDateTime = newDateString + "T23:59:00";
+      } else{
+        this.startDateTime = selectInfo.startStr.split('+')[0];
+        this.endDateTime = selectInfo.endStr.split('+')[0];
+      }
       this.isDialogOpen = true;
     },
     openDialog() {
