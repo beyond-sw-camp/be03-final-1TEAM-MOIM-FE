@@ -62,7 +62,11 @@
         <v-btn color="green darken-1" text @click="dialog = false">수정</v-btn>
         <v-btn color="green darken-1" text @click="showDeleteDialog">삭제</v-btn>
       </v-card-actions>
-      <DeleteRepeatEvent ref="delRepeatDialog"/>
+      <DeleteRepeatEvent
+          ref="delRepeatDialog"
+          :eventId="id"
+          :repeatParent="repeatParent"
+      />
     </v-card>
   </v-dialog>
 </template>
@@ -89,7 +93,7 @@ export default {
     };
   },
   methods: {
-    openDialog(id, nickname, title, memo, startDate, endDate, place, matrix, fileUrl, deleteYn, alarmYn) {
+    openDialog(id, nickname, title, memo, startDate, endDate, place, matrix, fileUrl, deleteYn, repeatParent, alarmYn) {
       this.id = id;
       this.nickname = nickname;
       this.title = title;
@@ -101,6 +105,7 @@ export default {
       this.fileUrl = fileUrl;
       this.deleteYn = deleteYn;
       this.alarmYn = alarmYn;
+      this.repeatParent = repeatParent;
       this.dialog = true;
       this.getAlarmInfo(id);
     },

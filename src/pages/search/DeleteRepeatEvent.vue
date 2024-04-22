@@ -15,6 +15,10 @@
         <v-btn color="primary" text @click="delRepeatDialog = false">취소</v-btn>
         <v-btn color="primary" text @click="deleteSchedule">확인</v-btn>
       </v-card-actions>
+      <v-card-text>
+        <p>Event ID: {{ eventId }}</p>
+        <p>Repeat Parent: {{ repeatParent }}</p>
+      </v-card-text>
     </v-card>
   </v-dialog>
 </template>
@@ -22,7 +26,8 @@
 <script>
 export default {
   props: {
-
+    eventId: Number,
+    repeatParent: Number,
   },
   data() {
     return {
