@@ -1,9 +1,14 @@
 <template>
   <v-dialog v-model="dialog" max-width="600">
     <v-card class="pa-4">
-      <v-card-title class="text-h5">
-        <v-icon class="mr-2">mdi-calendar-check-outline</v-icon>
-        {{ title }}
+      <v-card-title class="text-h5" style="width: 100%; display: flex; align-items: center;">
+        <v-icon class="mr-2" style="font-size: 25px;">mdi-calendar-check-outline</v-icon>
+        <div
+            class="title-text"
+            style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
+        >{{ title }}</div>
+        <v-spacer></v-spacer>
+        <v-btn class="no-shadow" density="comfortable" icon="mdi-close" @click="dialog = false"></v-btn>
       </v-card-title>
       <v-card-text class="mt-5">
         <v-row>
@@ -54,8 +59,10 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer/>
-        <v-btn color="green darken-1" text @click="dialog = false">Close</v-btn>
+        <v-btn color="green darken-1" text @click="dialog = false">수정</v-btn>
+        <v-btn color="green darken-1" text @click="showDeleteDialog">삭제</v-btn>
       </v-card-actions>
+      <DeleteRepeatEvent ref="delRepeatDialog"/>
     </v-card>
   </v-dialog>
 </template>
@@ -63,8 +70,10 @@
 <script>
 import {matrixToDescription} from "@/utils/common";
 import axios from "axios";
+import DeleteRepeatEvent from "@/pages/search/DeleteRepeatEvent.vue";
 
 export default {
+  components: {DeleteRepeatEvent},
   data() {
     return {
       dialog: false,
@@ -94,6 +103,9 @@ export default {
       this.alarmYn = alarmYn;
       this.dialog = true;
       this.getAlarmInfo(id);
+    },
+    showDeleteDialog() {
+      this.$refs.delRepeatDialog.openDeleteRepeatEventDialog();
     },
     async getAlarmInfo(eventId) {
       try {
@@ -133,7 +145,8 @@ export default {
 };
 </script>
 
-
-<style scoped>
-
+<style>
+.no-shadow {
+  box-shadow: none !important;
+}
 </style>
