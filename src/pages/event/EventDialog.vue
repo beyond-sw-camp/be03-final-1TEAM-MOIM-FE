@@ -146,20 +146,8 @@
 
 <script>
 import axios from 'axios';
-// import {useMainStore} from '@/stores'
 
 export default {
-  // setup() {
-  //   const mainStore = useMainStore();
-  //   const isDialogOpen = mainStore.isDialogOpen;
-  //   const closeDialog = mainStore.closeDialog;
-
-  //   return {
-  //     mainStore,
-  //     isDialogOpen,
-  //     closeDialog
-  //   };
-  // },
   data () {
     return {
       isDialogOpen: false,
@@ -280,10 +268,6 @@ export default {
         formData.append('toDoListRequests', toDoBlob); 
       }
     
-      
-      
-
-     
 
       if (this.files && this.files.length > 0) {
         // 우선 단일 파일만 전송할 수 있도록 설정
@@ -310,12 +294,6 @@ export default {
         console.log(error)
       }
     },
-
-    // formatDate(dateTimeStr) {
-    //   const dateTime = new Date(dateTimeStr);
-    //   console.log("이게머야", dateTime.toISOString())
-    //   return dateTime.toISOString().slice(0,19);
-    // },
   }
 }
 </script>
