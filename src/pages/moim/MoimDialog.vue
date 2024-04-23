@@ -24,8 +24,8 @@
               v-model="friends"
               :items="people"
               color="blue-grey-lighten-2"
-              item-text="name"
-              item-value="name"
+              item-text="email"
+              item-value="email"
               label="참여자를 추가하세요"
               chips
               dense
@@ -199,7 +199,7 @@ export default {
       friends: [],
       people: [],
       place: "",
-      runningTime: "",
+      runningTime: null,
       voteDeadline: "",
       expectStartDate: "",
       expectEndDate: "",
@@ -361,40 +361,58 @@ export default {
       // 알림 설정 관련
       const alarmYn = this.alertQuantity ? "Y" : "N";
       let alarmType;
-      if (this.timeType === "분") alarmType = "M";
-      if (this.timeType === "시간") alarmType = "H";
-      if (this.timeType === "일") alarmType = "D";
+      if (this.timeType === "분") alarmType = "MIN";
+      if (this.timeType === "시간") alarmType = "HOUR";
+      if (this.timeType === "일") alarmType = "DAY";
 
       //러닝타임
-      let runningTimeType;
-      if (this.runningTimeType === "시간") runningTime = runningTime*60;
-      if (this.runningTimeType === "일") runningTime =runningTimeType *1440;
+      let runningTime;
+      if (this.runningTimeType === "분") runningTime = this.runningTime
+      if (this.runningTimeType === "시간") runningTime = this.runningTime * 60;
+      if (this.runningTimeType === "일") runningTime = this.runningTime * 1440;
 
-      // groupRequest 조립
-      let groupRequest = {
-        title: this.title,
-        place: this.place,
-        runningTime: runningTime,
-        expectStartDate: this.expectStartDate,
-        expectEndDate: this.expectEndDate,
-        expectStartTime: this.expectStartTime,
-        expectEndTime: this.expectEndTime,
-        voteDeadline: this.voteDeadline,
-        contents: this.contents,
-        alarmYn: alarmYn,
-      };
+      const formData = new FormData();
+      formData.append('title', this.title);
+      formData.append('place', this.place);
+      formData.append('runningTime', runningTime);
+      formData.append('expectStartDate', this.expectStartDate);
+      formData.append('expectEndDate', this.expectEndDate);
+      formData.append('expectStartTime', this.expectStartTime);
+      formData.append('expectEndTime', this.expectEndTime);
+      formData.append('voteDeadline', this.voteDeadline.replace('T', ' '));
+      formData.append('contents', this.contents);
+      formData.append('alarmYn', alarmYn);
+      console.log(this.title)
+      console.log(runningTime)
+      console.log(this.expectStartDate)
+      console.log(this.expectStartTime)
+      console.log(this.voteDeadline)
+
+      // // groupRequest 조립
+      // let groupRequest = {
+      //   title: this.title,
+      //   place: this.place,
+      //   runningTime: runningTime,
+      //   expectStartDate: this.expectStartDate,
+      //   expectEndDate: this.expectEndDate,
+      //   expectStartTime: this.expectStartTime,
+      //   expectEndTime: this.expectEndTime,
+      //   voteDeadline: this.voteDeadline,
+      //   contents: this.contents,
+      //   alarmYn: alarmYn,
+      // };
 
       // Blob 객체로 변환
-      const groupRequestBlob = new Blob([JSON.stringify(groupRequest)], {
-        type: "application/json",
-      });
+      // const groupRequestBlob = new Blob([JSON.stringify(groupRequest)], {
+      //   type: "application/json",
+      // });
 
       // alarmRequests 조립
       const alarmList = [];
       if (this.alertQuantity) {
         alarmList.push({
-          setTime: this.alertQuantity,
-          alarmType: alarmType,
+          deadlineAlarm: this.alertQuantity,
+          alarmTimeType: alarmType,
         });
       }
       const alarmBlob = new Blob([JSON.stringify(alarmList)], {
@@ -402,23 +420,26 @@ export default {
       });
 
       //groupInfoRequests 조립
-      const groupInfoList = this.friends.map((friend) => ({ memberEmail: friend.email }));
+      const groupInfoList = this.friends.map((friend) => ({ memberEmail: friend }));
+      console.log(groupInfoList)
       const groupInfoBlob = new Blob([JSON.stringify(groupInfoList)], {
         type: "application/json",
       });
+      console.log("??", this.friends[0])
       console.log("추가된 참가자", groupInfoList);
 
-      const formData = new FormData();
-      formData.append("groupRequest", groupRequestBlob);
+      // formData.append("groupRequest", groupRequestBlob);
       formData.append("groupInfoRequests", groupInfoBlob);
       formData.append("groupAlarmRequests", alarmBlob);
 
       
-  if (this.files.length > 0) {
-    this.files.forEach(file => {
-      formData.append("files", file);
-    });
-  }
+      if (this.files.length > 0) {
+        this.files.forEach(file => {
+          formData.append("files", file);
+        });
+      }
+
+      console.log(formData)
 
       // const TOKEN = localStorage.getItem("accessToken");
       const authToken = localStorage.getItem("accessToken");
@@ -433,7 +454,7 @@ export default {
         await axios.post(url, formData, {
           headers: {
             Authorization: `Bearer ${authToken}`,
-            // "Content-Type": "multipart/form-data",
+            "Content-Type": "multipart/form-data",
           },
         });
         console.log("모임 등록완료");
