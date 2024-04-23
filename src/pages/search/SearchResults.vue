@@ -60,6 +60,7 @@ export default {
           result.matrix,
           result.fileUrl,
           result.deleteYn,
+          result.repeatParent,
           result.alarmYn,
       );
     }
