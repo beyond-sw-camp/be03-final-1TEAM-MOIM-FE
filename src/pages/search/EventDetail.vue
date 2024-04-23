@@ -53,7 +53,7 @@
             <v-icon class="mr-2">mdi-file-multiple-outline</v-icon>
           </v-col>
           <v-col cols="12" md="10" v-if="fileUrl">
-            <v-btn :href="fileUrl" download>파일 다운로드</v-btn>
+            <v-btn :href="fileUrl" target="_blank" download>파일 다운로드</v-btn>
           </v-col>
         </v-row>
       </v-card-text>
