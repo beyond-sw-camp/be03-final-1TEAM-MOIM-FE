@@ -4,14 +4,17 @@ import { defineStore } from "pinia";
 export const useMainStore = defineStore({
     id: 'main',
     state: () => ({
-        isDialogOpen: false
+        isDialogOpen: false,
+        dialogType: null // 'event' 또는 'moim' 값을 가질 수 있음
     }),
     actions: {
-        openDialog() {
+        openDialog(type) {
             this.isDialogOpen = true;
+            this.dialogType = type;
         },
         closeDialog() {
             this.isDialogOpen = false;
+            this.dialogType = null;
         }
     }
 })
