@@ -35,23 +35,6 @@
       </v-list>
     </v-menu>
 
-    <!-- <v-menu offset-y v-model="menu">
-      <template #activator="{ on, attrs }">
-        <v-btn icon v-bind="attrs" v-on="on">
-          <v-icon>mdi-bell-outline</v-icon>
-        </v-btn>
-      </template>
-  
-      <v-list>
-        <v-list-item v-for="(item, index) in notifications" :key="index">
-          <v-list-item-content>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-            <v-list-item-subtitle>{{ item.subtitle }}</v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-menu> -->
-
     <v-text-field
         @focus="searchClosed=false"
         @blur="searchClosed=true"
@@ -77,9 +60,26 @@
 import axios from "axios";
 import { useSearchStore } from '@/stores/searchStore'
 import { EventSourcePolyfill } from 'event-source-polyfill';
+import Swal from 'sweetalert2'
 
 export default {
   name: "AppHeader",
+  setup() {
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 4000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer)
+        toast.addEventListener('mouseleave', Swal.resumeTimer)
+      }
+    })
+    return {
+      Toast,
+    }
+  },
 
   data() {
     return {
@@ -101,19 +101,25 @@ export default {
       sse.addEventListener('connect', (e) => {
         const { data: receivedConnectData } = e;
         console.log('connect event data: ',receivedConnectData); 
+      
+        // this.Toast.fire({
+        //   icon: 'success',
+        //   title: e.data
+        // })
       });
-      sse.addEventListener('sendEventAlarm', e => { 
+    }
+    sse.addEventListener('sendEventAlarm', (e) => { 
         const obj = JSON.parse(e.data);
-        this.newNotification = this.newNotification + 1;
         // let timeAgo = this.calculateTimeAgo(obj.sendTime)
         // this.items.push({
         //   title: obj.message,
         //   subtitle: timeAgo
         // }) 
-        console.log(obj)
-        console.log(this.items[0].message); 
+        this.Toast.fire({
+          icon: 'info',
+          title: obj.message
+        })
       });
-    }
   },
   methods: {
     getAuthToken() {
@@ -214,7 +220,7 @@ export default {
 };
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
 .v-app-bar
   color: #162A2C
   .v-icon, .v-text-field, .v-app-bar-title
@@ -230,4 +236,8 @@ export default {
     max-width: 45px
     .v-input__slot
       background: transparent !important
+  .v-menu__content 
+    max-height: 300px
+    overflow-y: auto
+  
 </style>
