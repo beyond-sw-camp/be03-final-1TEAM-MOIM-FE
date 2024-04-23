@@ -19,41 +19,42 @@
           </v-col>
 
           <!-- 참여자 추가 (Auto-complete) -->
-          <v-col cols="12" md="3"><h4>참여자</h4></v-col>
           <v-col cols="12">
             <v-autocomplete
-              v-model="people"
+              v-model="friends"
               :items="people"
               color="blue-grey-lighten-2"
-              item-text="nickname"
-              item-value="id"
+              item-text="name"
+              item-value="name"
               label="참여자를 추가하세요"
               chips
               dense
               multiple
+              closable-chips
+              autocomplete="on"
               :rules="[
                 (v) => !!v.length || '최소 한명의 참가자가 있어야 모임이 생성됩니다.',
               ]"
             >
               >
-              
+              <!-- 참여자 추가하세요 뜨는 부분 -->
               <template v-slot:chip="{ props, item }">
                 <v-chip
                   v-bind="props"
-                  :prepend-avatar="item.profileImage"
-                  :text="item.nickname"
+                  :prepend-avatar="item.raw.profileImage"
+                  :text="item.raw.nickname"
                 ></v-chip>
               </template>
 
-              <!-- <template v-slot:item="{ props, item }">
+              <!-- 눌렀을때 뜨는 부분 -->
+              <template v-slot:item="{ props, item }">
                 <v-list-item
                   v-bind="props"
-                  :prepend-avatar="item.profileImage"
-                  :title="item.nickname"  
-                  :subtitle="item.email" 
+                  :prepend-avatar="item.raw.profileImage"
+                  :title="item.raw.nickname"
+                  :subtitle="item.raw.email"
                 ></v-list-item>
-              </template> -->
-
+              </template>
 
               <template v-slot:selection="{ item, index }">
                 <v-chip :key="index" closable @click:close="removeFriend(item.id)">
@@ -65,50 +66,120 @@
 
           <!-- 장소 -->
           <v-col cols="12" sm="12">
-            <v-text-field
-              label="장소를 입력하세요"
-              :rules="[(value) => !!value || '장소 필수?']"
-              required
-              v-model="place"
-            >
-            </v-text-field>
+            <v-text-field label="장소를 입력하세요" v-model="place"> </v-text-field>
           </v-col>
 
           <!-- 예상 모임 시간 -->
-          <v-col cols="12" md="3"><h4>예상 모임 시간</h4></v-col>
-          <v-col cols="12" md="9">
-            <input type="time" v-model="startDate" />
+          <v-col cols="12" md="12"><h4>예상 모임 시간</h4></v-col>
+          <v-col cols="12" md="7">
+            <v-text-field
+              type="number"
+              v-model="runningTime"
+              label="예상 모임 시간"
+              :rules="[(value) => !!value || '']"
+              required
+            >
+            </v-text-field>
+          </v-col>
+          <v-col cols="12" md="5">
+            <v-select
+              v-model="runningTimeType"
+              :items="runningtimeTypes"
+              label="시간 단위"
+            >
+            </v-select>
           </v-col>
 
           <!-- 시작/종료 날짜 -->
           <v-col cols="12" md="3"><h4>시작일</h4></v-col>
           <v-col cols="12" md="9">
-            <input type="date" v-model="startDate" />
+            <input
+              type="date"
+              v-model="expectStartDate"
+              :rules="[(value) => !!value || '']"
+              required
+            />
           </v-col>
           <v-col cols="12" md="3"><h4>종료일</h4></v-col>
           <v-col cols="12" md="9">
-            <input type="date" v-model="endDate" />
+            <input
+              type="date"
+              v-model="expectEndDate"
+              :rules="[(value) => !!value || '']"
+              required
+            />
           </v-col>
           <!-- 시작/종료 시간 -->
           <v-col cols="12" md="3"><h4>시작 시간</h4></v-col>
           <v-col cols="12" md="9">
-            <input type="time" v-model="startTime" />
+            <input
+              type="time"
+              v-model="expectStartTime"
+              :rules="[(value) => !!value || '']"
+              required
+            />
           </v-col>
           <v-col cols="12" md="3"><h4>종료 시간</h4></v-col>
           <v-col cols="12" md="9">
-            <input type="time" v-model="endTime" />
+            <input
+              type="time"
+              v-model="expectEndTime"
+              :rules="[(value) => !!value || '']"
+              required
+            />
+          </v-col>
+
+          <!-- 투표 종료 시간 -->
+          <v-col cols="12" md="3"><h4>투표 종료 시간</h4></v-col>
+          <v-col cols="12" md="9">
+            <input
+              type="datetime-local"
+              v-model="voteDeadline"
+              :rules="[(value) => !!value || '']"
+              required
+            />
+          </v-col>
+
+          <!-- 투표 마감 전 알림 -->
+          <v-col cols="12" md="12"><h4>투표 마감 전 알림</h4></v-col>
+          <v-col cols="12" md="7">
+            <v-text-field type="number" v-model="alertQuantity" label="알람 시간">
+            </v-text-field>
+          </v-col>
+          <v-col cols="12" md="5">
+            <v-select v-model="timeType" :items="timeTypes" label="시간 단위"> </v-select>
           </v-col>
 
           <!-- 메모 -->
           <v-col cols="12" md="12">
-            <v-text-field label="메모를 입력하세요." v-model="memo"> </v-text-field>
+            <v-text-field label="메모를 입력하세요." v-model="contents"> </v-text-field>
           </v-col>
         </v-row>
       </v-card-text>
 
+      <!-- 파일 -->
+      <v-col cols="12" md="12">
+        <v-file-input
+          v-model="files"
+          label="File input"
+          placeholder="Upload your documents"
+          prepend-icon="mdi-paperclip"
+          show-size
+          multiple
+        >
+          <template v-slot:selection="{ fileNames }">
+            <template v-for="fileName in fileNames" :key="fileName">
+              <v-chip class="me-2" color="primary" size="small" label>
+                {{ fileName }}
+              </v-chip>
+            </template>
+          </template>
+        </v-file-input>
+      </v-col>
+
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="blue darken-1" @click="createEvent">생성</v-btn>
+        <v-btn color="blue darken-1" @click="createMoim">생성</v-btn>
         <v-btn color="blue darken-1" @click="closeDialog">취소</v-btn>
       </v-card-actions>
     </v-card>
@@ -116,108 +187,264 @@
 </template>
 
 <script>
-import { ref, onMounted, computed } from "vue";
+// import { ref, onMounted, computed } from "vue";
 import axios from "axios";
-import { useMainStore } from "@/stores/index.js";
+// import { useMainStore } from "@/stores/index.js";
 
 export default {
-  setup() {
-    const mainStore = useMainStore();
-    const title = ref("");
-    const people = ref([]);
-    // const people = [
-    //   { nickname: 'Sandra Adams', group: 'Group 1' },
-    //   { nickname: 'Ali Connors', group: 'Group 1'},
-    //   { nickname: 'Trevor Hansen', group: 'Group 1'},
-    //   { nickname: 'Tucker Smith', group: 'Group 1'},
-    //   { nickname: 'Britta Holt', group: 'Group 2'},
-    //   { nickname: 'Jane Smith ', group: 'Group 2'},
-    //   { nickname: 'John Smith', group: 'Group 2' },
-    //   { nickname: 'Sandra Williams', group: 'Group 2'},
-    // ];
-    const place = ref("");
-    const startDate = ref("");
-    const endDate = ref("");
-    const startTime = ref("");
-    const endTime = ref("");
-    const memo = ref("");
+  data() {
+    return {
+      isDialogOpen: true,
+      title: "",
+      friends: [],
+      people: [],
+      place: "",
+      runningTime: "",
+      voteDeadline: "",
+      expectStartDate: "",
+      expectEndDate: "",
+      expectStartTime: "",
+      contents: "",
+      files: [],
+      alertQuantity: null,
+      alertType: "",
+      timeType: "분",
+      timeTypes: ["분", "시간", "일"],
+      runningTimeType: "분",
+      runningtimeTypes: ["분", "시간", "일"],
 
-    const isDialogOpen = computed(() => mainStore.isDialogOpen);
+      // closeDialog: "",
+    };
+  },
+  mounted() {
+    this.fetchPeople();
+  },
 
-    const fetchPeople = async () => {
+  methods: {
+    selectOpenDialog(selectInfo) {
+      console.log("view", selectInfo.view);
+      console.log("start", selectInfo.start);
+      console.log("startStr", selectInfo.startStr);
+      console.log("startStr", selectInfo.endStr);
+      if (selectInfo.view.type == "dayGridMonth") {
+        // string 타입의 날짜를 Date 객체로 변환
+        let dateObject = new Date(selectInfo.endStr);
+        // 1일을 빼기 위해 24시간 * 60분 * 60초 * 1000밀리초를 빼줌
+        dateObject.setTime(dateObject.getTime() - 1 * 24 * 60 * 60 * 1000);
+        // 변경된 날짜를 string으로 변환
+        let newDateString = dateObject.toISOString().split("T")[0];
+        this.startDateTime = selectInfo.startStr + "T00:00:00";
+        this.endDateTime = newDateString + "T23:59:00";
+      } else {
+        this.startDateTime = selectInfo.startStr.split("+")[0];
+        this.endDateTime = selectInfo.endStr.split("+")[0];
+      }
+      this.isDialogOpen = true;
+    },
+    openDialog() {
+      this.isDialogOpen = true;
+    },
+    closeDialog() {
+      this.isDialogOpen = false;
+      // isDialogOpen = computed(() => mainStore.isDialogOpen);
+    },
+
+    async fetchPeople() {
       const authToken = localStorage.getItem("accessToken");
+      const url = `${process.env.VUE_APP_API_BASE_URL}/api/members/search`;
       if (!authToken) {
         console.error("인증 토큰이 없습니다.");
         return;
       }
 
       try {
-        const response = await axios.get("http://localhost:8080/api/members/search", {
+        const response = await axios.get(url, {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },
         });
 
         if (response.data.success && Array.isArray(response.data.data)) {
-          people.value = response.data.data.map(user => ({...user,
-            profileImage: user.profileImage || 'https://moim-bucket.s3.ap-northeast-2.amazonaws.com/members/default_profile.png'  // 기본 이미지 설정
+          this.people = response.data.data.map((user) => ({
+            id: user.id,
+            name: user.nickname,
+            profileImage:
+              user.profileImage ||
+              "https://moim-bucket.s3.ap-northeast-2.amazonaws.com/members/default_profile.png",
+            nickname: user.nickname,
+            email: user.email,
           }));
-          console.log( '사람들 정보' , people.value);
-          console.log('1번 사람사람', people.value[0]);
+          console.log("사람들 정보", this.people);
+          console.log("1번 사람사람", this.people[0]);
         } else {
           console.error("사람들을 불러오는데 실패했습니다: API 에러 반환", response.data);
-          people.value = [];
+          this.people = [];
         }
       } catch (error) {
         console.error("사람들을 불러오는데 실패했습니다:", error);
-        people.value = [];
+        this.people = [];
       }
-    };
+    },
 
-    onMounted(fetchPeople);
+    // onMounted(fetchPeople);
 
-    const removeFriend = (id) => {
-      people.value = people.value.filter((f) => f.id !== id);
-    };
+    removeFriend(id) {
+      this.friends = this.friends.filter((p) => p.id !== id);
+    },
 
-    const createEvent = async () => {
+    // async createMoim() {
+    //   const formData = new FormData();
+    //   formData.append("title", this.title);
+    //   formData.append("memo", this.memo);
+    //   formData.append("place", this.place);
+    //   formData.append("startDate", this.startDate);
+    //   formData.append("endDate", this.endDate);
+    //   formData.append("startTime", this.startTime);
+    //   formData.append("endTime", this.endTime);
+    //   formData.append("people", JSON.stringify(this.friends.map((p) => p.id)));
+
+    //   try {
+    //     await axios.post("http://localhost:8080/api/events", formData, {
+    //       headers: {
+    //         "Content-Type": "multipart/form-data",
+    //       },
+    //     });
+    //     this.isDialogOpen = false;
+    //   } catch (error) {
+    //     console.error("이벤트 생성 실패:", error);
+    //   }
+    // },
+    async createMoim() {
+      if (!this.title) {
+        alert("제목을 입력하세요.");
+        return;
+      }
+      if (!this.runningTime) {
+        alert("모임 예상시간을 입력하세요.");
+        return;
+      }
+
+      if (!this.expectStartDate) {
+        alert("시작일을 입력하세요.");
+        return;
+      }
+      if (!this.expectEndDate) {
+        alert("종료일을 입력하세요.");
+        return;
+      }
+      if (!this.expectStartTime) {
+        alert("시작시간을 입력하세요.");
+        return;
+      }
+      if (!this.expectEndTime) {
+        alert("종료시간을 입력하세요.");
+        return;
+      }
+      if (!this.voteDeadline) {
+        alert("투표마감일을 입력하세요.");
+        return;
+      }
+
+      if (new Date(this.expectStartDate) > new Date(this.expectEndDate)) {
+        alert("시작일은 종료일보다 전이어야 합니다.");
+        return;
+      }
+
+      // 시간 비교
+      let startDateTime = new Date("1970-01-01T" + this.expectStartTime + ":00");
+      let endDateTime = new Date("1970-01-01T" + this.expectEndTime + ":00");
+      if (startDateTime >= endDateTime) {
+        alert("시작시간은 종료시간보다 전이어야 합니다.");
+        return;
+      }
+
+      // 알림 설정 관련
+      const alarmYn = this.alertQuantity ? "Y" : "N";
+      let alarmType;
+      if (this.timeType === "분") alarmType = "M";
+      if (this.timeType === "시간") alarmType = "H";
+      if (this.timeType === "일") alarmType = "D";
+
+      //러닝타임
+      let runningTimeType;
+      if (this.runningTimeType === "시간") runningTime = runningTime*60;
+      if (this.runningTimeType === "일") runningTime =runningTimeType *1440;
+
+      // groupRequest 조립
+      let groupRequest = {
+        title: this.title,
+        place: this.place,
+        runningTime: runningTime,
+        expectStartDate: this.expectStartDate,
+        expectEndDate: this.expectEndDate,
+        expectStartTime: this.expectStartTime,
+        expectEndTime: this.expectEndTime,
+        voteDeadline: this.voteDeadline,
+        contents: this.contents,
+        alarmYn: alarmYn,
+      };
+
+      // Blob 객체로 변환
+      const groupRequestBlob = new Blob([JSON.stringify(groupRequest)], {
+        type: "application/json",
+      });
+
+      // alarmRequests 조립
+      const alarmList = [];
+      if (this.alertQuantity) {
+        alarmList.push({
+          setTime: this.alertQuantity,
+          alarmType: alarmType,
+        });
+      }
+      const alarmBlob = new Blob([JSON.stringify(alarmList)], {
+        type: "application/json",
+      });
+
+      //groupInfoRequests 조립
+      const groupInfoList = this.friends.map((friend) => ({ memberEmail: friend.email }));
+      const groupInfoBlob = new Blob([JSON.stringify(groupInfoList)], {
+        type: "application/json",
+      });
+      console.log("추가된 참가자", groupInfoList);
+
       const formData = new FormData();
-      formData.append("title", title.value);
-      formData.append("memo", memo.value);
-      formData.append("place", place.value);
-      formData.append("startDate", startDate.value);
-      formData.append("endDate", endDate.value);
-      formData.append("startTime", startTime.value);
-      formData.append("endTime", endTime.value);
-      formData.append("people", JSON.stringify(people.value.map((f) => f.id)));
+      formData.append("groupRequest", groupRequestBlob);
+      formData.append("groupInfoRequests", groupInfoBlob);
+      formData.append("groupAlarmRequests", alarmBlob);
+
+      
+  if (this.files.length > 0) {
+    this.files.forEach(file => {
+      formData.append("files", file);
+    });
+  }
+
+      // const TOKEN = localStorage.getItem("accessToken");
+      const authToken = localStorage.getItem("accessToken");
+      const url = `${process.env.VUE_APP_API_BASE_URL}/api/groups/create`;
+
+      if (!authToken) {
+        console.error("인증 토큰이 없습니다.");
+        return;
+      }
 
       try {
-        await axios.post("http://localhost:8080/api/events", formData, {
+        await axios.post(url, formData, {
           headers: {
-            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${authToken}`,
+            // "Content-Type": "multipart/form-data",
           },
         });
-        mainStore.closeDialog();
+        console.log("모임 등록완료");
+
+        this.closeDialog();
+        window.alert(this.title + " 모임이 생성되었습니다.");
+        window.location.reload();
       } catch (error) {
-        console.error("이벤트 생성 실패:", error);
+        console.log(error);
       }
-    };
-
-    return {
-      title,
-
-      people,
-      place,
-      startDate,
-      endDate,
-      startTime,
-      endTime,
-      memo,
-      isDialogOpen,
-      fetchPeople,
-      removeFriend,
-      createEvent,
-    };
+    },
   },
 };
 </script>
