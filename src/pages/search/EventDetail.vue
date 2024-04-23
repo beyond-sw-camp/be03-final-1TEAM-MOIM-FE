@@ -6,15 +6,15 @@
         <div
             class="title-text"
             style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
-        >{{ title }}</div>
-        <v-spacer></v-spacer>
-        <v-btn class="no-shadow" density="comfortable" icon="mdi-close" @click="dialog = false"></v-btn>
-      </v-card-title>
-      <v-card-text class="mt-5">
-        <v-row>
-          <v-col cols="12" md="2"><h4>시작일</h4></v-col>
-          <v-col cols="12" md="10">
-            <input type="datetime-local" :value="startDate" readonly>
+            >{{ title }}</div>
+            <v-spacer></v-spacer>
+            <v-btn class="no-shadow" density="comfortable" icon="mdi-close" @click="dialog = false"></v-btn>
+            </v-card-title>
+            <v-card-text class="mt-5">
+              <v-row>
+                <v-col cols="12" md="2"><h4>시작일</h4></v-col>
+                <v-col cols="12" md="10">
+                  <input type="datetime-local" :value="startDate" readonly>
           </v-col>
           <v-col cols="12" md="2"><h4>종료일</h4></v-col>
           <v-col cols="12" md="10">
@@ -88,6 +88,7 @@ export default {
       endDate: '',
       place: '',
       matrix: '',
+      originalMatrix: '',
       memo: '',
       alarmInfo: '',
       displayAlarmInfo: '',
@@ -100,6 +101,13 @@ export default {
       const event = {
         id: this.id,
         title: this.title,
+        memo: this.memo,
+        startDate: this.startDate,
+        endDate: this.endDate,
+        place: this.place,
+        matrix: this.originalMatrix,
+        alarmYn: this.alarmYn,
+        fileUrl: this.fileUrl,
       }
       eventStore.setCurrentEvent(event);
       this.$router.push({ name: "updateEvent" });
@@ -113,6 +121,7 @@ export default {
       this.endDate = endDate;
       this.place = place;
       this.matrix = matrixToDescription(matrix);
+      this.originalMatrix = matrix;
       this.fileUrl = fileUrl;
       this.deleteYn = deleteYn;
       this.alarmYn = alarmYn;
