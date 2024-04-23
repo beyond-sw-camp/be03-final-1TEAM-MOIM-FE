@@ -10,6 +10,7 @@ import DialogTestView from "@/views/DialogTestView.vue";
 import fullCalendarComponent from "@/views/FullCalendarComponent.vue";
 import SearchResults from "@/pages/search/SearchResults.vue";
 import EventDetailDialog from "@/pages/event/EventDetailDialog.vue";
+import UpdateEvent from "@/components/UpdateEvent.vue";
 
 const routes = [
     {
@@ -83,6 +84,12 @@ const routes = [
                 name: "eventDetail",
                 component: EventDetailDialog
             },
+            // 일정 수정
+            {
+                path: "updateEvent",
+                name: "updateEvent",
+                component: UpdateEvent
+            }
         ]
     },
 ];

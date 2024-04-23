@@ -59,7 +59,7 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer/>
-        <v-btn color="green darken-1" text @click="dialog = false">수정</v-btn>
+        <v-btn color="green darken-1" text @click="goToUpdateEvent">수정</v-btn>
         <v-btn color="green darken-1" text @click="showDeleteDialog" v-if="repeatParent != null">삭제</v-btn>
         <v-btn color="green darken-1" text @click="deleteSingleEvent" v-else>단일 일정 삭제</v-btn>
       </v-card-actions>
@@ -76,6 +76,7 @@
 import {matrixToDescription} from "@/utils/common";
 import axios from "axios";
 import DeleteRepeatEvent from "@/pages/search/DeleteRepeatEvent.vue";
+import {useEventStore} from "@/stores/updateEventStore";
 
 export default {
   components: {DeleteRepeatEvent},
@@ -94,6 +95,15 @@ export default {
     };
   },
   methods: {
+    goToUpdateEvent() {
+      const eventStore = useEventStore();
+      const event = {
+        id: this.id,
+        title: this.title,
+      }
+      eventStore.setCurrentEvent(event);
+      this.$router.push({ name: "updateEvent" });
+    },
     openDialog(id, nickname, title, memo, startDate, endDate, place, matrix, fileUrl, deleteYn, repeatParent, alarmYn) {
       this.id = id;
       this.nickname = nickname;
