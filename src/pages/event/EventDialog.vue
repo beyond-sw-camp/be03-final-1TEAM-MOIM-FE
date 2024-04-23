@@ -7,7 +7,8 @@
       </v-card-title>
       <v-card-text>
         <v-row dense>
-          <v-col cols="12" sm="12">
+          <v-col cols="12" sm="2"><h4>제목</h4></v-col>
+          <v-col cols="12" sm="10">
             <v-text-field label="제목을 입력하세요"
                           :rules="[value => !!value || '']"
                           required
@@ -22,16 +23,45 @@
           <v-col cols="12" md="10">
             <input type="datetime-local" v-model="endDateTime">
           </v-col>
-          <v-col cols="12" sm="12">
+          <v-col cols="12" sm="2"><h4>장소</h4></v-col>
+          <v-col cols="12" sm="10">
             <v-text-field label="장소를 입력하세요"
                           :rules="[value => !!value || '']"
                           required
                           v-model="place">
             </v-text-field>
           </v-col>
-          <v-col cols="12" sm="12"><h4>아이젠하워 매트릭스 중요도</h4></v-col>
-          <v-col cols="12" sm="12">
-            <v-container fluid>
+          <v-col cols="12" sm="2"><h4>메모</h4></v-col>
+          <v-col cols="12" md="10">
+            <v-textarea
+                auto-grow label="메모를 입력하세요."
+                v-model="memo">
+            </v-textarea>
+          </v-col>
+          <v-col cols="12" md="2"><h4>할 일</h4></v-col>
+          <v-col cols="12" sm="10">
+            <v-row dense v-for="(todo, index) in todos" :key="index">
+              <v-col cols="2" sm="1">
+                <v-checkbox
+                  v-model="todo.done">
+                </v-checkbox>
+              </v-col>
+              <v-col cols="9" sm="9">
+                <v-text-field variant="underlined"
+                  label="내용"
+                  v-model="todo.text"
+                  :rules="[rules.required]">
+                </v-text-field>
+              </v-col>
+              <v-col cols="12" sm="1">
+                <v-btn flat @click="removeTodo(index)">삭제</v-btn>
+              </v-col>
+            </v-row>
+            <v-btn flat @click="addTodo">할 일 추가</v-btn>
+          </v-col>
+          <v-col cols="12" md="2"><h4>중요도</h4></v-col>
+          <v-col cols="12" sm="10">
+            <v-container>
               <v-radio-group v-model="radios"
                              :rules="[value => !!value || '4가지 선택지 중 하나를 선택해주세요']"
                              required>
@@ -73,11 +103,17 @@
                 label="시간 단위" >
             </v-select>
           </v-col>
-          <v-col cols="12" md="12">
-            <v-text-field
-                label="메모를 입력하세요."
-                v-model="memo">
-            </v-text-field>
+          <v-col cols="12" md="2"><h4>반복</h4></v-col>
+          <v-col cols="12" md="5">
+            <v-select
+                v-model="repeatType"
+                :items="repeatTypes"
+                label="반복 단위" >
+            </v-select>
+          </v-col>
+          <v-col cols="12" md="2"><h4>반복종료</h4></v-col>
+          <v-col cols="12" md="3">
+            <input type="date" v-model="repeatEndDate">
           </v-col>
           <v-col cols="12" md="12">
             <v-file-input
@@ -110,96 +146,174 @@
 
 <script>
 import axios from 'axios';
-import {useMainStore} from '@/stores'
-import {jwtDecode} from "jwt-decode";
 
 export default {
-  setup() {
-    const mainStore = useMainStore();
-    const isDialogOpen = mainStore.isDialogOpen;
-    const closeDialog = mainStore.closeDialog;
-
+  data () {
     return {
-      mainStore,
-      isDialogOpen,
-      closeDialog
-    };
+      isDialogOpen: false,
+      title: '',
+      memo: '',
+      place: '',
+      radios: 'Q1',
+      startDateTime: null,
+      endDateTime: null,
+      alertQuantity: null,
+      timeType: '',
+      timeTypes: ['분', '시간', '일'],
+      repeatEndDate: null,
+      repeatType: null,
+      repeatTypes: ['매년', '매월', '매주', '매일'],
+      todos: [],
+      rules: {
+        required: value => !!value || '내용을 입력해주세요.',
+      },
+      files: [],
+    } 
   },
 
-  data: () => ({
-    title: '',
-    memo: '',
-    place: '',
-    radios: null,
-    startDateTime: null,
-    endDateTime: null,
-    alertQuantity: null,
-    timeType: '분',
-    timeTypes: ['분', '시간', '일'],
-    files: [],
-  }),
-
   methods: {
+    selectOpenDialog(selectInfo) {
+      console.log("view" ,selectInfo.view);
+      console.log("start", selectInfo.start);
+      console.log("startStr", selectInfo.startStr);
+      console.log("startStr", selectInfo.endStr);
+      if(selectInfo.view.type == 'dayGridMonth') {
+        // string 타입의 날짜를 Date 객체로 변환
+        let dateObject = new Date(selectInfo.endStr);
+        // 1일을 빼기 위해 24시간 * 60분 * 60초 * 1000밀리초를 빼줌
+        dateObject.setTime(dateObject.getTime() - (1 * 24 * 60 * 60 * 1000));
+        // 변경된 날짜를 string으로 변환
+        let newDateString = dateObject.toISOString().split('T')[0];
+        this.startDateTime = selectInfo.startStr + "T00:00:00";
+        this.endDateTime = newDateString + "T23:59:00";
+      } else{
+        this.startDateTime = selectInfo.startStr.split('+')[0];
+        this.endDateTime = selectInfo.endStr.split('+')[0];
+      }
+      this.isDialogOpen = true;
+    },
+    openDialog() {
+      this.isDialogOpen = true;
+    },
+    closeDialog() {
+      this.isDialogOpen = false;
+    },
+    addTodo() {
+      this.todos.push({ text: '', done: false });
+    },
+    removeTodo(index) {
+      this.todos.splice(index, 1);
+    },
     async createEvent() {
-      const TOKEN = localStorage.getItem('accessToken');
-      const email = jwtDecode(TOKEN).email;
-      const url = `${process.env.VUE_APP_API_BASE_URL}/api/events`;
+      if (!this.title) {
+        alert('제목을 입력하세요.');
+        return;
+      }
+
+      if (!this.startDateTime){
+        alert("시작일을 입력하세요.");
+        return;
+      }
+
+      if (!this.endDateTime) {
+        alert('종료일을 입력하세요.');
+        return;
+      }
 
       // 알림 설정 관련
       const alarmYn = this.alertQuantity ? 'Y' : 'N';
       let alarmType;
       if (this.timeType === '분') alarmType = 'M';
-      else if (this.timeType === '시간') alarmType = 'H';
-      else alarmType = 'D';
+      if (this.timeType === '시간') alarmType = 'H';
+      if (this.timeType === '일') alarmType = 'D';
 
-      const alarmSetting = [];
+      // eventRequest 조립
+      let eventRequest = {
+        title: this.title,
+        memo: this.memo,
+        startDate: this.startDateTime,
+        endDate: this.endDateTime,
+        place: this.place,
+        matrix: this.radios,
+        alarmYn: alarmYn
+      }
+      const eventBlob = new Blob([JSON.stringify(eventRequest)], { type: 'application/json' });
+
+      // alarmRequests 조립
+      const alarmList = [];
       if (this.alertQuantity) {
-        alarmSetting.push({
-          setTime: String(this.alertQuantity),
-          alarmType: String(alarmType),
+        alarmList.push({
+          setTime: this.alertQuantity,
+          alarmType: alarmType,
         });
       }
-
-      // let alarmJsonInfo = JSON.stringfy(alarmSetting);
-      // const alarmRequest = new Blob([alarmJsonInfo], { type: 'application/json' });
-
-      console.log("토큰: " + TOKEN);
-      console.log("이메일: " + email);
-      console.log("url: " + url);
-      // console.log("alarmSetting을 알아보자: " + JSON.stringify(alarmSetting));
-      // console.log("alarmSetting을 알아보자: " + typeof alarmSetting);
-      // console.log("alarmSetting을 알아보자: " + typeof alarmSetting);
-
+      const alarmBlob = new Blob([JSON.stringify(alarmList)], { type: 'application/json' });
+      
 
       const formData = new FormData();
-      formData.append('nickname', email);
-      formData.append('title', this.title);
-      formData.append('memo', this.memo);
-      formData.append('startDate', this.formatDate(this.startDateTime));
-      formData.append('endDate', this.formatDate(this.endDateTime));
-      formData.append('place', this.place);
-      formData.append('matrix', this.radios);
-      formData.append('alarmYn', alarmYn);
-      // formData.append('alarmRequest', JSON.stringify(alarmSetting));
+      formData.append('eventRequest', eventBlob);
+      formData.append('alarmRequests', alarmBlob); 
+
+      // repeatRequest 조립
+      if(this.repeatType != null){
+        let repeatType;
+        if (this.repeatType === '매년') repeatType = 'Y';
+        if (this.repeatType === '매월') repeatType = 'M';
+        if (this.repeatType === '매주') repeatType = 'W';
+        if (this.repeatType === '매일') repeatType = 'D';
+        let repeatRequest = {
+          repeatType: repeatType,
+          repeatEndDate: this.repeatEndDate
+        }
+        const repeatBlob = new Blob([JSON.stringify(repeatRequest)], { type: 'application/json' });
+        formData.append('repeatRequest', repeatBlob); 
+      }
+
+      // toDoListRequests 조립
+      const toDoList = [];
+      if (this.todos.length > 0) {
+        for (const todo of this.todos) {
+          let isChecked = todo.done ? "Y" : "N";
+
+          if (!todo.text) {
+            alert('내용을 입력하세요.');
+            return;
+          }
+
+          toDoList.push({
+            contents: todo.text,
+            isChecked: isChecked,
+          });
+        }
+        const toDoBlob = new Blob([JSON.stringify(toDoList)], { type: 'application/json' });
+        formData.append('toDoListRequests', toDoBlob); 
+      }
+    
 
       if (this.files && this.files.length > 0) {
         // 우선 단일 파일만 전송할 수 있도록 설정
         formData.append('file', this.files[0]);
       }
 
-      await axios.post(url, formData, {
-        headers: {
-          "Authorization": `Bearer ${TOKEN}`,
-          'Content-Type': 'multipart/form-data'
-        }
-      });
+      const TOKEN = localStorage.getItem('accessToken');
+      const url = `${process.env.VUE_APP_API_BASE_URL}/api/events`;
 
-      this.closeDialog();
-    },
+      try {
+        await axios.post(url, formData, {
+          headers: {
+            "Authorization": `Bearer ${TOKEN}`,
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        console.log("등록완료")
+      
+        this.closeDialog();
+        window.alert(this.title + " 일정이 생성되었습니다.")
+        window.location.reload();
 
-    formatDate(dateTimeStr) {
-      const dateTime = new Date(dateTimeStr);
-      return dateTime.toISOString().slice(0,19);
+      } catch (error) {
+        console.log(error)
+      }
     },
   }
 }

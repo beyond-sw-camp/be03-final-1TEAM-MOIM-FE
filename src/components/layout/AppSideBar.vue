@@ -18,7 +18,10 @@
       <v-list-item prepend-icon="mdi-account-multiple" title="Shared with me" value="shared"></v-list-item>
       <v-list-item prepend-icon="mdi-star" title="Starred" value="starred"></v-list-item>
       <v-list-item prepend-icon="mdi-widgets" title="일정 생성" value="createEvent" @click="createEventClicked"></v-list-item>
+
       <v-list-item prepend-icon="mdi-widgets" title="모임 생성" value="createMoim" @click="createMoimClicked"></v-list-item>
+
+      <EventDialog ref="EventCreate"></EventDialog>
       <v-list-item prepend-icon="mdi-view-dashboard" title="Eisenhower Matrix" @click="goToEisenhowerMatrix"></v-list-item>
       <v-list-item prepend-icon="mdi-calendar" title="Calendar" @click="goTo('calendar')"></v-list-item>
       <v-list-item prepend-icon="mdi-calendar" title="다이얼로그 테스트" @click="goTo('dialogTestView')"></v-list-item>
@@ -30,25 +33,32 @@
 </template>
 
 <script>
-
-import {useMainStore} from "@/stores";
+import EventDialog from '@/pages/event/EventDialog.vue';
+// import {useMainStore} from "@/stores";
 
 export default {
   name: "AppSidebar",
-  setup() {
-    const mainStore = useMainStore();
-    return {
-      mainStore
-    }
+  // setup() {
+  //   const mainStore = useMainStore();
+  //   return {
+  //     mainStore
+  //   }
+  // },
+  components: {
+    EventDialog
   },
   methods: {
     createEventClicked() {
       console.log("일정 생성 클릭");
+<<<<<<< HEAD
       this.mainStore.openDialog('event');
     },
     createMoimClicked() {
       console.log("모임 생성 클릭");
       this.mainStore.openDialog('moim');
+=======
+      this.$refs.EventCreate.openDialog();
+>>>>>>> a52dd8d3a56e3b53eb68916d1b89276c62ae9c4c
     },
     goTo(route) {
       this.$router.push({ name: route });

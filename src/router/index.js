@@ -8,6 +8,8 @@ import EventDialog from "@/pages/event/EventDialog.vue";
 import EisenhowerMatrix from "@/views/EisenhowerMatrix.vue";
 import DialogTestView from "@/views/DialogTestView.vue";
 import fullCalendarComponent from "@/views/FullCalendarComponent.vue";
+import SearchResults from "@/pages/search/SearchResults.vue";
+import EventDetailDialog from "@/pages/event/EventDetailDialog.vue";
 
 const routes = [
     {
@@ -58,6 +60,12 @@ const routes = [
                 component: EisenhowerMatrix
             },
 
+            // 검색 결과
+            {
+                path: "/search",
+                name: "Search",
+                component: SearchResults,
+            },
 
             // 공통 다이얼로그 테스트를 위한 라우팅
             {
@@ -69,6 +77,11 @@ const routes = [
                 path: "fullCalendarComponent",
                 name: "fullCalendarComponent",
                 component: fullCalendarComponent
+            },
+            {
+                path: "eventDetail",
+                name: "eventDetail",
+                component: EventDetailDialog
             },
         ]
     },
