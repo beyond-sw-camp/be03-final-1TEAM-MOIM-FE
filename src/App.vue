@@ -6,14 +6,17 @@
 	<router-view></router-view>
   <v-app>
     <v-dialog v-model="mainStore.isDialogOpen" max-width="600px">
-      <EventDialog/>
+      <EventDialog v-if="mainStore.dialogType == 'event'"/>
+      <!-- <MoimDialog v-if="mainStore.dialogType == 'moim'"/> -->
     </v-dialog>
   </v-app>
 </template>
 
 <script setup>
 import EventDialog from "@/pages/event/EventDialog.vue";
+// import MoimDialog from "@/pages/moim/MoimDialog.vue";
 import {useMainStore} from "@/stores";
+
 
 const mainStore = useMainStore();
 </script>
