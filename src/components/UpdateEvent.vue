@@ -20,6 +20,25 @@
           type="datetime-local"
           :rules="[rules.endNotBeforeStart()]"
           @blur="$refs.form.validate()"/>
+
+      <v-file-input
+          v-model="files"
+          label="File input"
+          placeholder="Upload your documents"
+          prepend-icon="mdi-paperclip"
+          show-size
+          multiple>
+        <template v-slot:selection="{ fileNames }">
+          <template v-for="fileName in fileNames" :key="fileName">
+            <v-chip class="me-2" color="primary" size="small" label>
+              {{ fileName }}
+            </v-chip>
+          </template>
+        </template>
+      </v-file-input>
+
+
+
       <v-btn @click="updateForm">수정 완료</v-btn>
     </v-form>
     <p>Event ID: {{ eventId }}</p>
@@ -115,8 +134,9 @@ export default {
       formData.append('eventRequest', eventBlob);
 
       if (this.files && this.files.length > 0) {
-        // 우선 단일 파일만 전송할 수 있도록 설정
-        formData.append('file', this.files[0]);
+        this.files.forEach(file => {
+          formData.append('file', file);
+        });
       }
 
       const TOKEN = localStorage.getItem('accessToken');
@@ -125,7 +145,7 @@ export default {
       try {
         await axios.patch(url, formData, {
           headers: {
-            Authorization: `Bearer ${TOKEN}`,
+            "Authorization": `Bearer ${TOKEN}`,
             "Content-Type": "multipart/form-data"
           }
         });
