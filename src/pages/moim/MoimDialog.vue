@@ -211,7 +211,7 @@ export default {
       timeType: "분",
       timeTypes: ["분", "시간", "일"],
       runningTimeType: "분",
-      runningtimeTypes: ["분", "시간", "일"],
+      runningtimeTypes: ["분", "시간"],
 
       // closeDialog: "",
     };
@@ -353,6 +353,8 @@ export default {
       // 시간 비교
       let startDateTime = new Date("1970-01-01T" + this.expectStartTime + ":00");
       let endDateTime = new Date("1970-01-01T" + this.expectEndTime + ":00");
+      let durationMinutes = (endDateTime - startDateTime) / 60000; 
+
       if (startDateTime >= endDateTime) {
         alert("시작시간은 종료시간보다 전이어야 합니다.");
         return;
@@ -369,7 +371,13 @@ export default {
       let runningTime;
       if (this.runningTimeType === "분") runningTime = this.runningTime
       if (this.runningTimeType === "시간") runningTime = this.runningTime * 60;
-      if (this.runningTimeType === "일") runningTime = this.runningTime * 1440;
+      // if (this.runningTimeType === "일") runningTime = this.runningTime * 1440;
+
+      if (durationMinutes < runningTime) {
+        alert("예상 모임 시간보다 짧은 시간을 설정하였습니다. 시간 설정을 확인해 주세요.");
+        return;
+      }
+
 
       const formData = new FormData();
       formData.append('title', this.title);
