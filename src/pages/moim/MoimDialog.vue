@@ -194,7 +194,7 @@ import axios from "axios";
 export default {
   data() {
     return {
-      isDialogOpen: true,
+      isDialogOpen: false,
       title: "",
       friends: [],
       people: [],
