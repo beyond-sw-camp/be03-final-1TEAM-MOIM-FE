@@ -6,21 +6,27 @@
           label="일정 제목"
           :rules="rules.title"
           @blur="$refs.form.validate()"/>
-      <!-- Event Start Date Field -->
       <v-text-field
           v-model="eventStartDate"
           label="일정 시작 날짜"
           type="datetime-local"
           :rules="[rules.startNotAfterEnd()]"
           @blur="$refs.form.validate()"/>
-      <!-- Event End Date Field -->
       <v-text-field
           v-model="eventEndDate"
           label="일정 종료 날짜"
           type="datetime-local"
           :rules="[rules.endNotBeforeStart()]"
           @blur="$refs.form.validate()"/>
-
+      <v-text-field
+          v-model="eventPlace"
+          label="장소"/>
+      <v-textarea
+          v-model="eventMemo"
+          label="일정 메모"
+          auto-grow
+          :rules="rules.memo"
+          @blur="$refs.form.validate()"/>
       <v-file-input
           v-model="files"
           label="File input"
@@ -36,20 +42,17 @@
           </template>
         </template>
       </v-file-input>
-
-
-
       <v-btn @click="updateForm">수정 완료</v-btn>
     </v-form>
     <p>Event ID: {{ eventId }}</p>
     <p>Event Title: {{ eventTitle }}</p>
     <p>Event Memo: {{ eventMemo }}</p>
-    <p>Event StartDate: {{eventStartDate}}</p>
-    <p>Event EndDate: {{eventEndDate}}</p>
-    <p>Event Place: {{eventPlace}}</p>
-    <p>Event Matrix: {{eventMatrix}}</p>
-    <p>Event AlarmYn: {{eventAlarmYn}}</p>
-    <p>Event FileUrl: {{eventFileUrl}}</p>
+    <p>Event StartDate: {{ eventStartDate }}</p>
+    <p>Event EndDate: {{ eventEndDate }}</p>
+    <p>Event Place: {{ eventPlace }}</p>
+    <p>Event Matrix: {{ eventMatrix }}</p>
+    <p>Event AlarmYn: {{ eventAlarmYn }}</p>
+    <p>Event FileUrl: {{ eventFileUrl }}</p>
   </v-container>
 </template>
 
@@ -77,6 +80,9 @@ export default {
         dateTime: [
           v => !!v || "날짜와 시간은 필수 항목입니다!",
           v => !isNaN(Date.parse(v)) || "유효한 날짜와 시간을 입력해주세요."
+        ],
+        memo: [
+          v => (!v || v.length <= 1000) || "메모는 1000자 이내로 작성되어야 합니다."
         ],
         startNotAfterEnd: () => {
           if (this.eventStartDate && this.eventEndDate) {
@@ -116,7 +122,6 @@ export default {
   },
   methods: {
     async updateForm() {
-
       // eventRequest 조립
       let eventRequest = {
         title: this.eventTitle,
@@ -150,8 +155,7 @@ export default {
           }
         });
         console.log("수정 완료")
-
-        window.alert(this.title + " 일정이 수정되었습니다.")
+        window.alert(this.eventTitle + " 일정이 수정되었습니다.")
         window.location.reload();
       } catch (error) {
         console.log(error);
