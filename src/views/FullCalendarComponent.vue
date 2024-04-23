@@ -104,7 +104,6 @@ export default {
 <style lang='css'>
 
 .demo-app {
-  margin-top : -15%;
   display: flex;
   min-height: 100%;
   font-family: Arial, Helvetica Neue, Helvetica, sans-serif;

@@ -6,15 +6,16 @@
         <div
             class="title-text"
             style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
-            >{{ title }}</div>
-            <v-spacer></v-spacer>
-            <v-btn class="no-shadow" density="comfortable" icon="mdi-close" @click="dialog = false"></v-btn>
-            </v-card-title>
-            <v-card-text class="mt-5">
-              <v-row>
-                <v-col cols="12" md="2"><h4>시작일</h4></v-col>
-                <v-col cols="12" md="10">
-                  <input type="datetime-local" :value="startDate" readonly>
+        >{{ title }}
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn class="no-shadow" density="comfortable" icon="mdi-close" @click="dialog = false"></v-btn>
+      </v-card-title>
+      <v-card-text class="mt-5">
+        <v-row>
+          <v-col cols="12" md="2"><h4>시작일</h4></v-col>
+          <v-col cols="12" md="10">
+            <input type="datetime-local" :value="startDate" readonly>
           </v-col>
           <v-col cols="12" md="2"><h4>종료일</h4></v-col>
           <v-col cols="12" md="10">
@@ -53,7 +54,7 @@
             <v-icon class="mr-2">mdi-file-multiple-outline</v-icon>
           </v-col>
           <v-col cols="12" md="10" v-if="fileUrl">
-            <v-btn :href="fileUrl" download>파일 다운로드</v-btn>
+            <v-btn :href="fileUrl" target="_blank" download>파일 다운로드</v-btn>
           </v-col>
         </v-row>
       </v-card-text>
@@ -110,7 +111,7 @@ export default {
         fileUrl: this.fileUrl,
       }
       eventStore.setCurrentEvent(event);
-      this.$router.push({ name: "updateEvent" });
+      this.$router.push({name: "updateEvent"});
     },
     openDialog(id, nickname, title, memo, startDate, endDate, place, matrix, fileUrl, deleteYn, repeatParent, alarmYn) {
       this.id = id;
@@ -137,15 +138,15 @@ export default {
         const token = localStorage.getItem("accessToken");
         if (token == null) {
           alert("로그인이 필요합니다.");
-          this.$router.push({ name: "Login" });
+          this.$router.push({name: "Login"});
           return;
         }
-        const headers = { Authorization: `Bearer ${token}` };
-        const response = await axios.get(`${process.env.VUE_APP_API_BASE_URL}/api/events/search/alarm/${eventId}`, { headers });
+        const headers = {Authorization: `Bearer ${token}`};
+        const response = await axios.get(`${process.env.VUE_APP_API_BASE_URL}/api/events/search/alarm/${eventId}`, {headers});
         this.alarmInfo = response.data.data;
         this.displayAlarmInfo = this.alarmInfo.map(alarm => {
           let timeUnit = '';
-          switch(alarm.alarmType) {
+          switch (alarm.alarmType) {
             case 'M':
               timeUnit = '분';
               break;
@@ -162,7 +163,7 @@ export default {
         }).join('');
 
         console.log('The alarm info is: ', this.alarmInfo);
-      } catch(error) {
+      } catch (error) {
         console.log(error);
       }
     },
@@ -172,18 +173,18 @@ export default {
         const token = localStorage.getItem("accessToken");
         if (token == null) {
           alert("로그인이 필요합니다.");
-          this.$router.push({ name: "Login" });
+          this.$router.push({name: "Login"});
           return;
         }
-        const headers = { Authorization: `Bearer ${token}` };
-        const response = await axios.delete(`${process.env.VUE_APP_API_BASE_URL}/api/events/${this.id}`, { headers });
-        if(response.status === 200) {
+        const headers = {Authorization: `Bearer ${token}`};
+        const response = await axios.delete(`${process.env.VUE_APP_API_BASE_URL}/api/events/${this.id}`, {headers});
+        if (response.status === 200) {
           alert('단일 일정 삭제 성공');
           location.reload(); // or some other code you want to run after delete
         } else {
           alert('단일 일정 삭제 실패');
         }
-      } catch(error) {
+      } catch (error) {
         console.log(error);
         alert('단일 일정 삭제 실패');
       }
