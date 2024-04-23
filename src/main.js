@@ -8,6 +8,8 @@ import token from './plugins/tokenPlugin';
 import axios from 'axios';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
+// import VueSweetalert2 from 'sweetalert2';
+// import 'sweetalert2/dist/sweetalert2.min.css';
 
 loadFonts()
 
@@ -26,6 +28,7 @@ axios.interceptors.response.use(
 app.use(router);
 app.use(vuetify);
 app.use(token);
+// app.use(VueSweetalert2);
 app.use(createPinia())
 app.component('VueDatePicker', VueDatePicker);
 app.mount('#app');
