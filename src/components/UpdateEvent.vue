@@ -21,6 +21,35 @@
       <v-text-field
           v-model="eventPlace"
           label="장소"/>
+      <!-- Add Radio buttons for eventMatrix-->
+      <v-col cols="12" md="2"><h4>중요도</h4></v-col>
+      <v-col cols="12" sm="10">
+        <v-container>
+          <v-radio-group v-model="eventMatrix"
+                         :rules="[value => !!value || '4가지 선택지 중 하나를 선택해주세요']" required>
+            <v-radio value="Q1">
+              <template v-slot:label>
+                <div>중요 & 긴급하지 않음</div>
+              </template>
+            </v-radio>
+            <v-radio value="Q2">
+              <template v-slot:label>
+                <div>중요 & 긴급</div>
+              </template>
+            </v-radio>
+            <v-radio value="Q3">
+              <template v-slot:label>
+                <div>중요하지 않음 & 긴급</div>
+              </template>
+            </v-radio>
+            <v-radio value="Q4">
+              <template v-slot:label>
+                <div>중요하지 않음 & 긴급하지 않음</div>
+              </template>
+            </v-radio>
+          </v-radio-group>
+        </v-container>
+      </v-col>
       <v-textarea
           v-model="eventMemo"
           label="일정 메모"
