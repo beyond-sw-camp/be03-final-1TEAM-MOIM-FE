@@ -1,23 +1,22 @@
 <template>
-  <v-navigation-drawer
-      expand-on-hover
-      rail
-  >
+  <v-navigation-drawer expand-on-hover rail>
     <v-list>
       <v-list-item
-          prepend-avatar="https://randomuser.me/api/portraits/women/85.jpg"
-          subtitle="sandra_a88@gmailcom"
-          title="Sandra Adams"
+        :prepend-avatar="profileImage"
+        :subtitle="email"
+        :title="nickname"
       ></v-list-item>
     </v-list>
 
     <v-divider></v-divider>
 
     <v-list density="compact" nav>
-      <v-list-item prepend-icon="mdi-folder" title="My Files" value="myfiles"></v-list-item>
-      <v-list-item prepend-icon="mdi-account-multiple" title="Shared with me" value="shared"></v-list-item>
-      <v-list-item prepend-icon="mdi-star" title="Starred" value="starred"></v-list-item>
-      <v-list-item prepend-icon="mdi-widgets" title="일정 생성" value="createEvent" @click="createEventClicked"></v-list-item>
+      <v-list-item
+        prepend-icon="mdi-widgets"
+        title="일정 생성"
+        value="createEvent"
+        @click="createEventClicked"
+      ></v-list-item>
       <EventDialog ref="EventCreate"></EventDialog>
       <v-list-item prepend-icon="mdi-widgets" title="모임 생성" value="createMoim" @click="createMoimClicked"></v-list-item>
       <MoimDialog ref="MoimCreate"></MoimDialog>
@@ -34,7 +33,9 @@
 <script>
 import EventDialog from '@/pages/event/EventDialog.vue';
 import MoimDialog from '@/pages/moim/MoimDialog.vue';
+
 // import {useMainStore} from "@/stores";
+import axios from "axios";
 
 export default {
   name: "AppSidebar",
@@ -47,8 +48,48 @@ export default {
   components: {
     EventDialog,
     MoimDialog
+
+  },
+  data() {
+    return {
+      profileImage: "",
+      email: "",
+      nickname: "",
+    };
+  },
+
+  mounted() {
+    this.fetchUserData();
   },
   methods: {
+    async fetchUserData() {
+      const authToken = localStorage.getItem("accessToken");
+      const url = `${process.env.VUE_APP_API_BASE_URL}/api/members`;
+      if (!authToken) {
+        console.error("인증 토큰이 없습니다.");
+        return;
+      }
+      try {
+        const response = await axios.get(url, {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        });
+
+        if (response.data.success && response.data.status === "OK") {
+          const userData = response.data.data;
+          this.profileImage = userData.profileImage;
+          this.email = userData.email;
+          this.nickname = userData.nickname;
+          console.log("profileImage ", this.profileImage);
+        } else {
+          console.error("Failed to fetch user data");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    },
+
     createEventClicked() {
       console.log("일정 생성 클릭");
       this.$refs.EventCreate.openDialog();
@@ -67,3 +108,4 @@ export default {
   }
 }
 </script>
+
