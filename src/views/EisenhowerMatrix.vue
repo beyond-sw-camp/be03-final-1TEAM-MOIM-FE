@@ -103,9 +103,9 @@
 </template>
 
 <script>
-import axios from "axios";
 import moment from "moment"; // 날짜 포맷을 위해 moment.js 사용
 import draggable from "vuedraggable";
+import axiosInstance from "@/axios";
 
 export default {
   components: {
@@ -157,7 +157,7 @@ export default {
     };
 
     try {
-      const response = await axios.patch(url, {}, { headers });
+      const response = await axiosInstance.patch(url, {}, { headers });
       if (response.data.success && response.data.data) {
         console.log("수정 요청 성공함");
       } else {
@@ -193,7 +193,7 @@ export default {
     };
 
     try {
-      const response = await axios.patch(url, {}, { headers });
+      const response = await axiosInstance.patch(url, {}, { headers });
       if (response.data.success && response.data.data) {
         console.log("수정 요청 성공함");
       } else {
@@ -229,7 +229,7 @@ export default {
     };
 
     try {
-      const response = await axios.patch(url, {}, { headers });
+      const response = await axiosInstance.patch(url, {}, { headers });
       if (response.data.success && response.data.data) {
         console.log("수정 요청 성공함");
       } else {
@@ -266,7 +266,7 @@ export default {
     };
 
     try {
-      const response = await axios.patch(url, {}, { headers });
+      const response = await axiosInstance.patch(url, {}, { headers });
       if (response.data.success && response.data.data) {
         console.log("수정 요청 성공함");
       } else {
@@ -322,7 +322,7 @@ export default {
       // console.log("Request URL:", url); // 요청 URL 확인
 
       try {
-        const response = await axios.get(url, { headers });
+        const response = await axiosInstance.get(url, { headers });
         if (response.data.success && response.data.data) {
           this[`events${matrix}`] = response.data.data; // 직접 data 필드를 참조
           console.log(`Data received for ${matrix}:`, this[`events${matrix}`]);
