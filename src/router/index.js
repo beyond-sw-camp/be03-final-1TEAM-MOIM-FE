@@ -42,7 +42,7 @@ const routes = [
             {
                 path: "main",
                 name: "MainPage",
-                component: {}
+                component: fullCalendarComponent
             },
             {
                 path: "event",

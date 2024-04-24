@@ -148,10 +148,12 @@ export default {
   },
   methods: {
     onNotiClick(notiInfo) {
-      if(notiInfo.notificationType == "GROUP_CHOICE") {
+      if(notiInfo.notificationType == "GROUP_CREATE" || notiInfo.notificationType == "GROUP_DEADLINE") {
         this.$refs.moimDetail.openDialog(notiInfo.groupId, notiInfo.hostName);
       }
-      
+      if(notiInfo.notificationType == "GROUP_CHOICE") {
+        this.$refs.moimDetail.choiceDialog(notiInfo.groupId, notiInfo.message, notiInfo.notificationType);
+      }
     },
     getAuthToken() {
       const token = localStorage.getItem("accessToken");
