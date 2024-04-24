@@ -107,25 +107,25 @@ export default {
         // })
       });
     }
-    sse.addEventListener('sendEventAlarm', (e) => { 
-        const obj = JSON.parse(e.data);
-        // let timeAgo = this.calculateTimeAgo(obj.sendTime)
-        // this.items.push({
-        //   title: obj.message,
-        //   subtitle: timeAgo
-        // }) 
-        this.Toast.fire({
-          icon: 'info',
-          title: obj.message
-        })
-      });
+    sse.addEventListener('sendEventAlarm', (e) => {
+      const obj = JSON.parse(e.data);
+      // let timeAgo = this.calculateTimeAgo(obj.sendTime)
+      // this.items.push({
+      //   title: obj.message,
+      //   subtitle: timeAgo
+      // })
+      this.Toast.fire({
+        icon: 'info',
+        title: obj.message
+      })
+    });
   },
   methods: {
     getAuthToken() {
       const token = localStorage.getItem("accessToken");
       if (!token) {
-        alert("로그인 후 이용해 주세요");
-        this.$router.push({name: "login"});
+        // alert("로그인 후 이용해 주세요");
+        window.location.href = "/login";
         return "";
       }
       return token;
