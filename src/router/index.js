@@ -9,6 +9,7 @@ import fullCalendarComponent from "@/views/FullCalendarComponent.vue";
 import SearchResults from "@/pages/search/SearchResults.vue";
 import EventDetailDialog from "@/pages/event/EventDetailDialog.vue";
 import UpdateEvent from "@/components/UpdateEvent.vue";
+import MoimList from "@/pages/moim/MoimList.vue"
 
 const routes = [
     {
@@ -76,6 +77,12 @@ const routes = [
                 name: "updateEvent",
                 component: UpdateEvent
             },
+
+            {
+                path: "MoimList",
+                name: "MoimList",
+                component: MoimList
+            }
         ]
     },
 ];

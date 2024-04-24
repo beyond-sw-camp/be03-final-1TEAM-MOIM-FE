@@ -22,6 +22,7 @@
       <MoimDialog ref="MoimCreate"></MoimDialog>
       <v-list-item prepend-icon="mdi-trello" title="Eisenhower Matrix" @click="goToEisenhowerMatrix"></v-list-item>
       <v-list-item prepend-icon="mdi-calendar" title="FullCalendar 테스트" @click="goTo('fullCalendarComponent')"></v-list-item>
+      <v-list-item prepend-icon="mdi-view-dashboard" title="모임 리스트" @click="goToMoimList"></v-list-item>
     </v-list>
   </v-navigation-drawer>
 
@@ -31,6 +32,7 @@
 <script>
 import EventDialog from '@/pages/event/EventDialog.vue';
 import MoimDialog from '@/pages/moim/MoimDialog.vue';
+
 
 // import {useMainStore} from "@/stores";
 import axiosInstance from "@/axios";
@@ -102,6 +104,11 @@ export default {
     goToEisenhowerMatrix() {
       this.$router.push({ path: '/EisenhowerMatrix' });
     },
+
+    goToMoimList() {
+      this.$router.push({ path: '/MoimList' });
+    },
+    
 
   }
 }

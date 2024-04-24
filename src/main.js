@@ -7,6 +7,8 @@ import vuetify from './plugins/vuetify';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import axios from "axios";
+import '@fortawesome/fontawesome-free/css/all.css'
+
 
 loadFonts();
 
