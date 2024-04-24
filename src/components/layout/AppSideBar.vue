@@ -33,7 +33,7 @@ import EventDialog from '@/pages/event/EventDialog.vue';
 import MoimDialog from '@/pages/moim/MoimDialog.vue';
 
 // import {useMainStore} from "@/stores";
-import axios from "axios";
+import axiosInstance from "@/axios";
 
 export default {
   name: "AppSidebar",
@@ -68,7 +68,7 @@ export default {
         return;
       }
       try {
-        const response = await axios.get(url, {
+        const response = await axiosInstance.get(url, {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },

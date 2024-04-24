@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axiosInstance from "@/axios";
 
 export default {
   props: {
@@ -66,7 +66,7 @@ export default {
           deleteType = 'after';
         }
 
-        await axios.delete(`${process.env.VUE_APP_API_BASE_URL}/api/events/repeat/${this.eventId}?deleteType=${deleteType}`, { headers });
+        await axiosInstance.delete(`${process.env.VUE_APP_API_BASE_URL}/api/events/repeat/${this.eventId}?deleteType=${deleteType}`, { headers });
         this.delRepeatDialog = false;
 
         this.processing = false;

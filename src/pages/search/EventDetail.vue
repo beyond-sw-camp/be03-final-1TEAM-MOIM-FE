@@ -75,9 +75,9 @@
 
 <script>
 import {matrixToDescription} from "@/utils/common";
-import axios from "axios";
 import DeleteRepeatEvent from "@/pages/search/DeleteRepeatEvent.vue";
 import {useEventStore} from "@/stores/updateEventStore";
+import axiosInstance from "@/axios";
 
 export default {
   components: {DeleteRepeatEvent},
@@ -142,7 +142,7 @@ export default {
           return;
         }
         const headers = {Authorization: `Bearer ${token}`};
-        const response = await axios.get(`${process.env.VUE_APP_API_BASE_URL}/api/events/search/alarm/${eventId}`, {headers});
+        const response = await axiosInstance.get(`${process.env.VUE_APP_API_BASE_URL}/api/events/search/alarm/${eventId}`, {headers});
         this.alarmInfo = response.data.data;
         this.displayAlarmInfo = this.alarmInfo.map(alarm => {
           let timeUnit = '';
@@ -177,7 +177,7 @@ export default {
           return;
         }
         const headers = {Authorization: `Bearer ${token}`};
-        const response = await axios.delete(`${process.env.VUE_APP_API_BASE_URL}/api/events/${this.id}`, {headers});
+        const response = await axiosInstance.delete(`${process.env.VUE_APP_API_BASE_URL}/api/events/${this.id}`, {headers});
         if (response.status === 200) {
           alert('단일 일정 삭제 성공');
           location.reload(); // or some other code you want to run after delete
