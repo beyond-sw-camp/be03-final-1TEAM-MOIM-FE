@@ -4,7 +4,7 @@ import Register from "@/views/RegisterView.vue";
 import Login from "@/views/LoginView.vue";
 import Oauth2Redirect from "@/components/Oauth2Redirect.vue";
 import EventDialog from "@/pages/event/EventDialog.vue";
-import EisenhowerMatrix from "@/views/EisenhowerMatrix.vue";
+import EisenhowerMatrix from "@/pages/eisenhower/EisenhowerMatrix.vue";
 import fullCalendarComponent from "@/views/FullCalendarComponent.vue";
 import SearchResults from "@/pages/search/SearchResults.vue";
 import EventDetailDialog from "@/pages/event/EventDetailDialog.vue";
@@ -17,12 +17,12 @@ const routes = [
         name: "login",
         component: Login,
         beforeEnter: (to, from, next) => {
-          const accessToken = localStorage.getItem('accessToken');  
-          if (accessToken){
-            next('/main'); // accessToken이 있으면 /main으로 redirect
-          } else {
-            next(); // accessToken이 없으면 로그인 페이지로 진입
-          }
+            const accessToken = localStorage.getItem('accessToken');
+            if (accessToken) {
+                next('/main'); // accessToken이 있으면 /main으로 redirect
+            } else {
+                next(); // accessToken이 없으면 로그인 페이지로 진입
+            }
         }
     },
     {
@@ -30,7 +30,7 @@ const routes = [
         name: "register",
         component: Register
     },
-    { 
+    {
         path: "/oauth2/redirect",
         component: Oauth2Redirect,
     },
@@ -77,6 +77,7 @@ const routes = [
                 name: "updateEvent",
                 component: UpdateEvent
             },
+
             {
                 path: "MoimList",
                 name: "MoimList",

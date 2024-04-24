@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer expand-on-hover rail>
+  <v-navigation-drawer permanent>
     <v-list>
       <v-list-item
         :prepend-avatar="profileImage"
@@ -20,7 +20,7 @@
       <EventDialog ref="EventCreate"></EventDialog>
       <v-list-item prepend-icon="mdi-widgets" title="모임 생성" value="createMoim" @click="createMoimClicked"></v-list-item>
       <MoimDialog ref="MoimCreate"></MoimDialog>
-      <v-list-item prepend-icon="mdi-view-dashboard" title="Eisenhower Matrix" @click="goToEisenhowerMatrix"></v-list-item>
+      <v-list-item prepend-icon="mdi-trello" title="Eisenhower Matrix" @click="goToEisenhowerMatrix"></v-list-item>
       <v-list-item prepend-icon="mdi-calendar" title="FullCalendar 테스트" @click="goTo('fullCalendarComponent')"></v-list-item>
       <v-list-item prepend-icon="mdi-view-dashboard" title="모임 리스트" @click="goToMoimList"></v-list-item>
     </v-list>
@@ -104,10 +104,12 @@ export default {
     goToEisenhowerMatrix() {
       this.$router.push({ path: '/EisenhowerMatrix' });
     },
+
     goToMoimList() {
       this.$router.push({ path: '/MoimList' });
     },
     
+
   }
 }
 </script>

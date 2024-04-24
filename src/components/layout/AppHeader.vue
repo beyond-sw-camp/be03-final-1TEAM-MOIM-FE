@@ -1,5 +1,6 @@
 <template>
   <v-app-bar
+      :elevation="0"
       color="teal-darken-4"
       image="https://picsum.photos/seed/picsum/1920/1080"
   >
@@ -53,6 +54,8 @@
       <v-icon>mdi-dots-vertical</v-icon>
     </v-btn>
   </v-app-bar>
+
+  <MoimDetail ref="moimDetail"></MoimDetail>
 </template>
 
 <script>
@@ -60,14 +63,17 @@ import { useSearchStore } from '@/stores/searchStore'
 import { EventSourcePolyfill } from 'event-source-polyfill';
 import Swal from 'sweetalert2'
 import axiosInstance from "@/axios";
+import MoimDetail from "@/pages/moim/MoimDetail.vue";
 
 export default {
   name: "AppHeader",
+  components: {
+    MoimDetail,
+  },
   setup() {
     const Toast = Swal.mixin({
       toast: true,
       position: 'top-end',
-      showConfirmButton: false,
       timer: 4000,
       timerProgressBar: true,
       didOpen: (toast) => {
@@ -99,28 +105,54 @@ export default {
       });
       sse.addEventListener('connect', (e) => {
         const { data: receivedConnectData } = e;
-        console.log('connect event data: ',receivedConnectData); 
-      
+        console.log('connect event data: ',receivedConnectData);
+
         // this.Toast.fire({
         //   icon: 'success',
         //   title: e.data
         // })
       });
     }
-    sse.addEventListener('sendEventAlarm', (e) => {
-      const obj = JSON.parse(e.data);
-      // let timeAgo = this.calculateTimeAgo(obj.sendTime)
-      // this.items.push({
-      //   title: obj.message,
-      //   subtitle: timeAgo
-      // })
-      this.Toast.fire({
-        icon: 'info',
-        title: obj.message
-      })
-    });
+    sse.addEventListener('sendEventAlarm', (e) => { 
+        const obj = JSON.parse(e.data);
+        // let timeAgo = this.calculateTimeAgo(obj.sendTime)
+        // this.items.push({
+        //   title: obj.message,
+        //   subtitle: timeAgo
+        // }) 
+        this.Toast.fire({
+          icon: 'info',
+          title: obj.message
+        })
+      });
+      sse.addEventListener('sendToParticipant', (e) => { 
+        const obj = JSON.parse(e.data);
+        // let timeAgo = this.calculateTimeAgo(obj.sendTime)
+        // this.items.push({
+        //   title: obj.message,
+        //   subtitle: timeAgo
+        // }) 
+        console.log("sse 정보", obj)
+        this.Toast.fire({
+          showConfirmButton: true,
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: '확인',
+          icon: 'info',
+          title: obj.message,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.onNotiClick(obj)
+          }
+        })
+      });
   },
   methods: {
+    onNotiClick(notiInfo) {
+      if(notiInfo.notificationType == "GROUP_CHOICE") {
+        this.$refs.moimDetail.openDialog(notiInfo.groupId, notiInfo.hostName);
+      }
+      
+    },
     getAuthToken() {
       const token = localStorage.getItem("accessToken");
       if (!token) {
@@ -223,6 +255,7 @@ export default {
 <style lang="sass" scoped>
 .v-app-bar
   color: #162A2C
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06)
   .v-icon, .v-text-field, .v-app-bar-title
     color: #162A2C !important
 .v-input.expanding-search
@@ -236,8 +269,8 @@ export default {
     max-width: 45px
     .v-input__slot
       background: transparent !important
-  .v-menu__content 
+  .v-menu__content
     max-height: 300px
     overflow-y: auto
-  
+
 </style>

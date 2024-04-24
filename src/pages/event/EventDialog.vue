@@ -152,6 +152,7 @@
 
 <script>
 import axiosInstance from "@/axios";
+import Swal from 'sweetalert2'
 
 export default {
   data() {
@@ -314,9 +315,13 @@ export default {
           },
         });
         console.log(response);
-        alert(this.title + " 일정이 생성되었습니다.");
         this.closeDialog();
-        this.$router.push({ name: "MainPage" });
+        Swal.fire({
+            title: '일정이 생성되었습니다.',
+            icon: 'success'
+          })
+           window.location.reload();
+        // this.$router.push({ name: "fullCalendarComponent" });
       } catch (error) {
         console.error(error);
       }
