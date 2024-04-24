@@ -53,6 +53,8 @@
       <v-icon>mdi-dots-vertical</v-icon>
     </v-btn>
   </v-app-bar>
+
+  <MoimDetail ref="moimDetail"></MoimDetail>
 </template>
 
 <script>
@@ -60,14 +62,17 @@ import { useSearchStore } from '@/stores/searchStore'
 import { EventSourcePolyfill } from 'event-source-polyfill';
 import Swal from 'sweetalert2'
 import axiosInstance from "@/axios";
+import MoimDetail from "@/pages/moim/MoimDetail.vue";
 
 export default {
   name: "AppHeader",
+  components: {
+    MoimDetail,
+  },
   setup() {
     const Toast = Swal.mixin({
       toast: true,
       position: 'top-end',
-      showConfirmButton: false,
       timer: 4000,
       timerProgressBar: true,
       didOpen: (toast) => {
@@ -126,13 +131,24 @@ export default {
         //   title: obj.message,
         //   subtitle: timeAgo
         // }) 
+        console.log("sse 정보", obj)
         this.Toast.fire({
+          showConfirmButton: true,
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: '확인',
           icon: 'info',
-          title: obj.message
+          title: obj.message,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.onNotiClick(obj)
+          }
         })
       });
   },
   methods: {
+    onNotiClick(notiInfo) {
+      this.$refs.moimDetail.openDialog(notiInfo.groupId, notiInfo.hostName);
+    },
     getAuthToken() {
       const token = localStorage.getItem("accessToken");
       if (!token) {
