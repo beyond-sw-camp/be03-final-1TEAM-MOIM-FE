@@ -467,7 +467,7 @@ export default {
         console.log("모임 등록완료");
 
         this.closeDialog();
-        // window.location.reload();
+        window.location.reload();
         Swal.fire({
             title: '모임이 등록되었습니다.',
             icon: 'success'

@@ -3,7 +3,7 @@
     <AppHeader></AppHeader>
     <AppSideBar></AppSideBar>
     <v-main class="no-top-margin">
-      <router-view/>
+      <router-view class="no-padding"/>
     </v-main>
   </v-app>
 </template>
@@ -16,5 +16,9 @@ import AppHeader from "@/components/layout/AppHeader.vue";
 <style scoped>
 .no-top-margin {
   margin-top: 0 !important;
+}
+
+.no-padding {
+  padding: 0 !important;
 }
 </style>
