@@ -148,7 +148,10 @@ export default {
   },
   methods: {
     onNotiClick(notiInfo) {
-      this.$refs.moimDetail.openDialog(notiInfo.groupId, notiInfo.hostName);
+      if(notiInfo.notificationType == "GROUP_CHOICE") {
+        this.$refs.moimDetail.openDialog(notiInfo.groupId, notiInfo.hostName);
+      }
+      
     },
     getAuthToken() {
       const token = localStorage.getItem("accessToken");

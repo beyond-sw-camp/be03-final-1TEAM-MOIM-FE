@@ -188,6 +188,7 @@
 
 <script>
 import axiosInstance from "@/axios";
+import Swal from 'sweetalert2'
 
 export default {
   data() {
@@ -466,8 +467,12 @@ export default {
         console.log("모임 등록완료");
 
         this.closeDialog();
-        window.alert(this.title + " 모임이 생성되었습니다.");
-        window.location.reload();
+        // window.location.reload();
+        Swal.fire({
+            title: '모임이 등록되었습니다.',
+            icon: 'success'
+          })
+        
       } catch (error) {
         console.log(error);
       }
