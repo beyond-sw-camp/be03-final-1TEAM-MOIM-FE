@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="isDialogOpen" max-width="600">
+  <v-dialog v-model="isDialogOpen" max-width="600" :persistent="true">
     <v-card class="pa-4">
       <v-card-title>
         <v-icon class="mr-2">mdi-calendar-plus</v-icon>
@@ -203,6 +203,15 @@ export default {
       this.isDialogOpen = true;
     },
     closeDialog() {
+      this.title = "";
+      this.memo = "";
+      this.place = "";
+      this.timeType = "";
+      this.alertQuantity = null;
+      this.todos = [];
+      this.files = [];
+      this.repeatEndDate = null;
+      this.repeatType = null;
       this.isDialogOpen = false;
     },
     addTodo() {
