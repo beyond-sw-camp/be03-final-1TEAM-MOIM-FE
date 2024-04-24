@@ -120,6 +120,18 @@ export default {
           title: obj.message
         })
       });
+      sse.addEventListener('sendToParticipant', (e) => { 
+        const obj = JSON.parse(e.data);
+        // let timeAgo = this.calculateTimeAgo(obj.sendTime)
+        // this.items.push({
+        //   title: obj.message,
+        //   subtitle: timeAgo
+        // }) 
+        this.Toast.fire({
+          icon: 'info',
+          title: obj.message
+        })
+      });
   },
   methods: {
     getAuthToken() {

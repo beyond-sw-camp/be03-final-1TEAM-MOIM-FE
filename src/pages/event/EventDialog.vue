@@ -317,7 +317,8 @@ export default {
         console.log(response);
         alert(this.title + " 일정이 생성되었습니다.");
         this.closeDialog();
-        this.$router.push({ name: "MainPage" });
+        // this.$router.push({ name: "MainPage" });
+        window.location.reload();
       } catch (error) {
         console.error(error);
       }
