@@ -3,10 +3,8 @@ import MainPage from "@/components/MainPage.vue";
 import Register from "@/views/RegisterView.vue";
 import Login from "@/views/LoginView.vue";
 import Oauth2Redirect from "@/components/Oauth2Redirect.vue";
-import CalendarComponent from "@/views/CalendarComponent.vue";
 import EventDialog from "@/pages/event/EventDialog.vue";
 import EisenhowerMatrix from "@/views/EisenhowerMatrix.vue";
-import DialogTestView from "@/views/DialogTestView.vue";
 import fullCalendarComponent from "@/views/FullCalendarComponent.vue";
 import SearchResults from "@/pages/search/SearchResults.vue";
 import EventDetailDialog from "@/pages/event/EventDetailDialog.vue";
@@ -46,11 +44,6 @@ const routes = [
                 component: {}
             },
             {
-                path: "calendar",
-                name: "calendar",
-                component: CalendarComponent
-            },
-            {
                 path: "event",
                 name: "EventDialog",
                 component: EventDialog
@@ -66,13 +59,6 @@ const routes = [
                 path: "/search",
                 name: "Search",
                 component: SearchResults,
-            },
-
-            // 공통 다이얼로그 테스트를 위한 라우팅
-            {
-                path: "dialogTestView",
-                name: "dialogTestView",
-                component: DialogTestView
             },
             {
                 path: "fullCalendarComponent",

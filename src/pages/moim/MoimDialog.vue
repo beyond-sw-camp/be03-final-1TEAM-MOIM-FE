@@ -187,9 +187,7 @@
 </template>
 
 <script>
-// import { ref, onMounted, computed } from "vue";
-import axios from "axios";
-// import { useMainStore } from "@/stores/index.js";
+import axiosInstance from "@/axios";
 
 export default {
   data() {
@@ -258,7 +256,7 @@ export default {
       }
 
       try {
-        const response = await axios.get(url, {
+        const response = await axiosInstance.get(url, {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },
@@ -459,7 +457,7 @@ export default {
       }
 
       try {
-        await axios.post(url, formData, {
+        await axiosInstance.post(url, formData, {
           headers: {
             Authorization: `Bearer ${authToken}`,
             "Content-Type": "multipart/form-data",

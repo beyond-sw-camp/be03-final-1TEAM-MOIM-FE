@@ -56,7 +56,7 @@
 
 
 <script>
-import axios from 'axios';
+import axiosInstance from "@/axios";
 
 export default {
   props: ['eventId'],
@@ -96,7 +96,7 @@ export default {
           this.$router.push({ name: "Login" });
           return;
         }
-        const response = await axios.get(`${process.env.VUE_APP_API_BASE_URL}/api/events/${eventId}`, { headers });
+        const response = await axiosInstance.get(`${process.env.VUE_APP_API_BASE_URL}/api/events/${eventId}`, { headers });
         const eventDetail = response.data.data;
         console.log(eventDetail)
         this.startDateTime = eventDetail.startDate;

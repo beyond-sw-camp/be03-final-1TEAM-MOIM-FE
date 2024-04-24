@@ -10,7 +10,6 @@
     <v-app-bar-title>MOIM</v-app-bar-title>
 
     <v-spacer></v-spacer>
-    
 
     <v-menu>
       <template v-slot:activator="{ props }">
@@ -57,10 +56,10 @@
 </template>
 
 <script>
-import axios from "axios";
 import { useSearchStore } from '@/stores/searchStore'
 import { EventSourcePolyfill } from 'event-source-polyfill';
 import Swal from 'sweetalert2'
+import axiosInstance from "@/axios";
 
 export default {
   name: "AppHeader",
@@ -137,8 +136,8 @@ export default {
     getAuthToken() {
       const token = localStorage.getItem("accessToken");
       if (!token) {
-        alert("로그인 후 이용해 주세요");
-        this.$router.push({name: "login"});
+        // alert("로그인 후 이용해 주세요");
+        window.location.href = "/login";
         return "";
       }
       return token;
@@ -160,7 +159,7 @@ export default {
       const searchStore = useSearchStore();
 
       try {
-        const response = await axios.get(url, {headers});
+        const response = await axiosInstance.get(url, {headers});
         console.log("!!!" + response.data.success);
         console.log("!!!" + response.data.data);
         if (response.data.success && response.data.data) {
@@ -185,7 +184,8 @@ export default {
           this.$router.push({ name: "Login" });
           return;
         }
-        const response = await axios.get(`${process.env.VUE_APP_API_BASE_URL}/api/notification`, { headers });
+        const response = await axiosInstance
+            .get(`${process.env.VUE_APP_API_BASE_URL}/api/notification`, { headers });
         const getNotifications = response.data.data;
         console.log(getNotifications);
         const notifications = [];

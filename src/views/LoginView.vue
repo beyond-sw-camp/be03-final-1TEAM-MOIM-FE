@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axiosInstance from "@/axios";
 
 export default {
   data() {
@@ -110,7 +110,7 @@ export default {
       };
       console.log(loginData);
       try {
-        const response = await axios.post(
+        const response = await axiosInstance.post(
           `${process.env.VUE_APP_API_BASE_URL}/login`,
           loginData
         );

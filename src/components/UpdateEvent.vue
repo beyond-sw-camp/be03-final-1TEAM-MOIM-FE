@@ -87,7 +87,7 @@
 
 <script>
 import {useEventStore} from "@/stores/updateEventStore";
-import axios from "axios";
+import axiosInstance from "@/axios";
 
 export default {
   data() {
@@ -177,7 +177,7 @@ export default {
       const url = `${process.env.VUE_APP_API_BASE_URL}/api/events/${this.eventId}`;
 
       try {
-        await axios.patch(url, formData, {
+        await axiosInstance.patch(url, formData, {
           headers: {
             "Authorization": `Bearer ${TOKEN}`,
             "Content-Type": "multipart/form-data"

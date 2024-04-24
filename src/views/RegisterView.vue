@@ -85,7 +85,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axiosInstance from "@/axios";
 
 export default {
     data() {
@@ -122,7 +122,7 @@ export default {
             // 이메일 인증 코드 요청 로직
             if (confirm("입력한 이메일로 인증 번호를 발송하시겠습니까?")){
                 alert("입력된 이메일로 인증 번호를 발송하였습니다.");
-                await axios.post(
+                await axiosInstance.post(
                     `${process.env.VUE_APP_API_BASE_URL}/api/auth/send`, {},
                     {
                         params: {
@@ -140,7 +140,7 @@ export default {
                 return;
             }
             try {
-                const response = await axios.post(
+                const response = await axiosInstance.post(
                     `${process.env.VUE_APP_API_BASE_URL}/api/auth/verify`, {},
                     {
                         params: {
@@ -186,7 +186,7 @@ export default {
 
             // 이메일 중복 확인 로직
             try {
-                const response = await axios.post(`${process.env.VUE_APP_API_BASE_URL}/api/auth/email-validate`, {}, 
+                const response = await axiosInstance.post(`${process.env.VUE_APP_API_BASE_URL}/api/auth/email-validate`, {},
                 {
                     params: {
                         email: this.email,
@@ -211,7 +211,7 @@ export default {
             }
 
             try {
-                const response = await axios.post(`${process.env.VUE_APP_API_BASE_URL}/api/auth/nickname-validate`, {}, 
+                const response = await axiosInstance.post(`${process.env.VUE_APP_API_BASE_URL}/api/auth/nickname-validate`, {},
                 {
                     params: {
                         nickname: this.nickname,
@@ -256,7 +256,7 @@ export default {
             };
 
             try {
-                const response = await axios.post(`${process.env.VUE_APP_API_BASE_URL}/api/auth/sign-up`, registerData, { headers });
+                const response = await axiosInstance.post(`${process.env.VUE_APP_API_BASE_URL}/api/auth/sign-up`, registerData, { headers });
                 console.log(response);
 
                 if (response.status === 200){

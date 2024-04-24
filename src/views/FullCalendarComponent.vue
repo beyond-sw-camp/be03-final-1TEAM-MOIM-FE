@@ -19,7 +19,7 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import EventDetailDialog from '../pages/event/EventDetailDialog.vue'
 import EventDialog from '../pages/event/EventDialog.vue'
-import axios from 'axios';
+import axiosInstance from "@/axios";
 
 export default {
   components: {
@@ -73,7 +73,7 @@ export default {
           this.$router.push({ name: "Login" });
           return;
         }
-        const response = await axios.get(`${process.env.VUE_APP_API_BASE_URL}/api/events/monthly/${year}/${month}`, { headers });
+        const response = await axiosInstance.get(`${process.env.VUE_APP_API_BASE_URL}/api/events/monthly/${year}/${month}`, { headers });
         const getEvents = response.data.data;
         console.log(getEvents)
         const events = [];
