@@ -1,5 +1,6 @@
 <template>
   <v-app-bar
+      :elevation="0"
       color="teal-darken-4"
       image="https://picsum.photos/seed/picsum/1920/1080"
   >
@@ -104,8 +105,8 @@ export default {
       });
       sse.addEventListener('connect', (e) => {
         const { data: receivedConnectData } = e;
-        console.log('connect event data: ',receivedConnectData); 
-      
+        console.log('connect event data: ',receivedConnectData);
+
         // this.Toast.fire({
         //   icon: 'success',
         //   title: e.data
@@ -254,6 +255,7 @@ export default {
 <style lang="sass" scoped>
 .v-app-bar
   color: #162A2C
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06)
   .v-icon, .v-text-field, .v-app-bar-title
     color: #162A2C !important
 .v-input.expanding-search
@@ -267,8 +269,8 @@ export default {
     max-width: 45px
     .v-input__slot
       background: transparent !important
-  .v-menu__content 
+  .v-menu__content
     max-height: 300px
     overflow-y: auto
-  
+
 </style>
