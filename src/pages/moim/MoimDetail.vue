@@ -69,8 +69,8 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer/>
-        <v-btn color="green darken-1" text @click="goToUpdateEvent">수락</v-btn>
-        <v-btn color="green darken-1" text @click="showDeleteDialog">거부</v-btn>
+        <v-btn color="#3085d6" text @click="vote('Y')">수락</v-btn>
+        <v-btn color="#d33" text @click="vote('N')">거부</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -78,12 +78,15 @@
 
 <script>
 import axiosInstance from "@/axios";
+import Swal from 'sweetalert2'
 
 export default {
   data() {
     return {
       dialog: false,
       hostNickname: '',
+      groupId: "",
+      groupInfoId: "",
       title: '',
       startDate: '',
       endDate: '',
@@ -98,6 +101,7 @@ export default {
   methods: {
     openDialog(groupId, hostNickname) {
       this.hostNickname = hostNickname;
+      this.groupId = groupId
       this.dialog = true;
       this.getMoimInfo(groupId);
     },
@@ -117,6 +121,7 @@ export default {
         this.startDate = `${groupInfo.expectStartDate} ${groupInfo.expectStartTime}`
         this.endDate = `${groupInfo.expectEndDate} ${groupInfo.expectEndTime}`
         this.runningTime = this.convertMinutes(groupInfo.runningTime)
+        this.groupInfoId = groupInfo.groupInfos[0].id
         const members = [];
         members.push(this.hostNickname)
         groupInfo.groupInfos.forEach(member => {
@@ -142,6 +147,30 @@ export default {
       } else {
         return `${remainingMinutes}분`;
       }
+    },
+    async vote(agreeYn) {
+      const token = localStorage.getItem("accessToken");
+      const headers = {Authorization: `Bearer ${token}`};
+      try {
+        const response = await axiosInstance.post(`${process.env.VUE_APP_API_BASE_URL}/api/groups/${this.groupId}/groupInfo/${this.groupInfoId}/notification?agreeYn=${agreeYn}`, {headers});
+        console.log("답", response.data.data)
+        this.dialog = false;
+        if(response.data.data.isAgree == "Y") {
+          Swal.fire({
+            title: '참여 완료되었습니다.',
+            icon: 'success'
+          })
+        }
+        if(response.data.data.isAgree == "N") {
+          Swal.fire({
+            title: '참여 거부하였습니다.',
+            icon: 'error'
+          })
+        }
+      }catch(e){
+        alert(e)
+      }
+      
     }
   }
 };
