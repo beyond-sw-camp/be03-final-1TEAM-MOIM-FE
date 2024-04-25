@@ -2,7 +2,7 @@
 
 ## 😁 팀원
  
-|<img src="img/eunji_image.jpg" height="150">|<img src="img/jaeseok_image.jpg" height="150">|<img src="img/soyoung_image.jpg" height="150">|<img src="img/bellwin_image.jpg" height="150">|
+|<img src="img/eunji_image.jpg" height="150">|<img src="img/jaeseok_image.jpg" height="150">|<img src="img/soyoung_image.jpg" height="150">|<img src="img/bellwin_image.jpeg" height="150">|
 |:---:|:---:|:---:|:---:|
 | [장은지(팀장)](https://github.com/Jang-Eun-Ji) | [신재석(팀원)](https://github.com/MrKeeplearning) | [배소영(팀원)](https://github.com/qoth-0) | [한종승(팀원)](https://github.com/BellWin98)  |
 </div>
